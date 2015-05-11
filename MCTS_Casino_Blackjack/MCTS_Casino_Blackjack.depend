@@ -5,12 +5,13 @@
 
 1431206259 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\card.h
 
-1431212996 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\main.cpp
+1431308081 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\main.cpp
 	"Card.h"
 	"Deck.h"
 	<time.h>
 	<cstdlib>
 	"Hand.h"
+	"Player.h"
 
 1431206934 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\deck.cpp
 	"Deck.h"
@@ -20,11 +21,21 @@
 	<Vector>
 	"Card.h"
 
-1431213442 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.cpp
+1431307887 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.cpp
 	"Hand.h"
 	<iostream>
 
-1431212571 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.h
+1431307888 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.h
 	<vector>
 	"Card.h"
+
+1431308025 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\player.cpp
+	"Player.h"
+	<iostream>
+
+1431308015 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\player.h
+	<string>
+	<vector>
+	"Card.h"
+	"Hand.h"
 

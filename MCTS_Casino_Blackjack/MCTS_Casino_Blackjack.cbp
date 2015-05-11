@@ -31,6 +31,15 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Card.cpp" />
+		<Unit filename="Card.h" />
+		<Unit filename="Deck.cpp" />
+		<Unit filename="Deck.h" />
+		<Unit filename="Hand.cpp" />
+		<Unit filename="Hand.h" />
+		<Unit filename="Main.cpp" />
+		<Unit filename="Player.cpp" />
+		<Unit filename="Player.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -7,6 +7,7 @@ Hand::Hand(int betValue){
     busted = false;
     doubled = false;
     blackjackPossible = true;
+    aceSplit = false;
     handValue = 0;
 }
 
@@ -19,7 +20,20 @@ Hand::Hand(Card& firstCard, int betValue ){
     busted = false;
     doubled = false;
     blackjackPossible = false;
+    if(tempCard->faceValue == 'A'){
+        aceSplit = true;
+    }
+
     calculateHandValue(); //needs to get card value
+}
+
+Hand::~Hand(){
+    std::vector<Card*>::iterator it = card.begin();
+    int i = 0;
+    for(it; it != card.end(); it++, i++){
+        Card* tempCard = *it;
+        delete tempCard;
+    }
 }
 
 bool Hand::canDouble(){
@@ -44,15 +58,17 @@ Card Hand::split(){
         tempCard =*card.back();
         card.pop_back();
     }
+    blackjackPossible = false;
     return tempCard;
 }
 
-void Hand::addCard(Card& newCard){
+void Hand::addCard(Card newCard){
     Card* tempCard = new Card(newCard);
     card.push_back(tempCard);
 }
 
 void Hand::sortAces(){
+    //places Aces at the end of a hand to add them easier
     int j = card.size() - 1;
     for(int i = card.size() - 1; i >= 1; i--){
         if(card[i]->faceValue == 'A'){
@@ -100,4 +116,7 @@ void Hand::printHand(){
     }
 
     std::cout << std::endl << "Hand value is " << handValue << std::endl;
+    if(busted){
+        std::cout << "The hand is busted" << std::endl;
+    }
 }

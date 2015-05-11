@@ -7,6 +7,7 @@ class Hand{
 public:
     Hand(int betValue);
     Hand(Card&, int betValue);
+    ~Hand();
 
     std::vector<Card*> card;
     int betValue;
@@ -16,8 +17,9 @@ public:
     bool busted;
     bool blackjackPossible;
     bool doubled;
+    bool aceSplit;
 
-    void addCard(Card&);
+    void addCard(Card);
     void sortAces();
     void calculateHandValue();
     Card split();
