@@ -3,14 +3,18 @@
 #include <time.h>
 #include <cstdlib>
 #include "Hand.h"
+
+
 #include "HumanPlayer.h"
 #include "HardDealer.h"
 #include "SoftDealer.h"
+#include "ActionPlayer.h"
+
 #include <iostream>
 
 
 #define NUM_DECKS 1
-#define NUM_SIMS 1000000
+#define NUM_SIMS 10000
 #define START_BANKROLL 10000
 
 
@@ -32,6 +36,46 @@ int main(){
     Player* dealer = new SoftDealer(10000);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+
+    delete player;
+    delete dealer;
+
+    player = new HardDealer(10000);
+    dealer = new HardDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new ActionPlayer(10000, HIT);
+    dealer = new SoftDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new ActionPlayer(10000, HIT);
+    dealer = new HardDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+
+    player = new ActionPlayer(10000, STAY);
+    dealer = new SoftDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new ActionPlayer(10000, STAY);
+    dealer = new HardDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
 
 }
 
@@ -147,6 +191,9 @@ void humanSoft(int decks, int bankroll, int simulations){
 
     for(int i = 0; i < simulations; i ++){
         humanPlayer->formatScreen();
+        if(humanPlayer->bankroll < humanPlayer->bid){
+            break;
+        }
         //restore the deck to a randomized original state
         deck.readyDeck();
         //deal Dealer's faceup card
@@ -180,9 +227,12 @@ void humanSoft(int decks, int bankroll, int simulations){
 
         //hands are evaluated
         humanPlayer->compareHands(softDealer->hand[0]);
+    }
+
+
         std::cout << "Rounds played : " << humanPlayer->roundsPlayed << std::endl;
         std::cout << "Rounds won : " << humanPlayer->roundsWon << std::endl;
-    }
+
 }
 
 
@@ -192,8 +242,18 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
     Player* player = newPlayer;
     Player* dealer = newDealer;
 
+    double highest_bankroll = 0;
+
     for(int i = 0; i < simulations; i ++){
         //restore the deck to a randomized original state
+        if(player->bankroll > highest_bankroll){
+            highest_bankroll = (double) player->bankroll;
+        }
+
+        if(player->bankroll < player->bid){
+            break;
+        }
+
         deck.readyDeck();
         //deal Dealer's faceup card
         dealer->initializeNewHand();
@@ -225,8 +285,12 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
 
         std::cout << "Rounds played : " << player->roundsPlayed << std::endl;
         std::cout << "Rounds won : " << player->roundsWon << std::endl;
-
+        std::cout << "Bankroll : " << player->bankroll << std::endl;
+        std::cout << "Highest Bankroll : " << highest_bankroll << std::endl << std::endl;
+        std::cout << "Win rate is " << (player->roundsWon / player->roundsPlayed) * 100 << "%" << std::endl;
 
         //print out statistics
+
+        std::cout << std::endl << std::endl;
 }
 
