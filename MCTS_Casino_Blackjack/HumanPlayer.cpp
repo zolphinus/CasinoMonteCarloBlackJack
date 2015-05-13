@@ -4,7 +4,6 @@
 
 HumanPlayer::HumanPlayer(int bankroll): Player(bankroll){
     playerName = "Human";
-
 }
 
 void HumanPlayer::selectAction(){
