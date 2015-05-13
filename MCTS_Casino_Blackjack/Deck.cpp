@@ -1,16 +1,12 @@
 #include "Deck.h"
 #include <cstdlib>
+#include <iostream>
 
 Deck::Deck(int numberOfDecks){
 
-    for(int i = 0; i < 13; i++){
-        for(int j = 0; j < 4; j++){
-            for(int k = 0; k < numberOfDecks; k++){
-                Card* tempCard = new Card(i, j);
-                card.push_back(tempCard);
-            }
-        }
-    }
+    this->numberOfDecks = numberOfDecks;
+    initializeDeck(numberOfDecks);
+    shuffle();
 }
 
 Deck::Deck(Deck& copyDeck){
@@ -23,12 +19,7 @@ Deck::Deck(Deck& copyDeck){
 }
 
 Deck::~Deck(){
-    std::vector<Card*>::iterator it = card.begin();
-    int i = 0;
-    for(it; it != card.end(); it++, i++){
-        Card* tempCard = *it;
-        delete tempCard;
-    }
+    destroy();
 }
 
 Card Deck::deal(){
@@ -53,4 +44,34 @@ void Deck::shuffle(){
         card[i] = card[j];
         card[j] = temp;
     }
+}
+
+
+void Deck::readyDeck(){
+    destroy();
+    initializeDeck(this->numberOfDecks);
+    shuffle();
+}
+
+
+void Deck::initializeDeck(int numberOfDecks){
+    for(int i = 0; i < 13; i++){
+        for(int j = 0; j < 4; j++){
+            for(int k = 0; k < numberOfDecks; k++){
+                Card* tempCard = new Card(i, j);
+                card.push_back(tempCard);
+            }
+        }
+    }
+}
+
+
+void Deck::destroy(){
+    std::vector<Card*>::iterator it = card.begin();
+    int i = 0;
+    for(it; it != card.end(); it++, i++){
+        Card* tempCard = *it;
+        delete tempCard;
+    }
+    card.clear();
 }

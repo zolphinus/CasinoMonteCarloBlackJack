@@ -41,7 +41,7 @@ bool Hand::canDouble(){
 }
 
 bool Hand::canSplit(){
-    if(card.size() >= 2){
+    if(card.size() > 2 || card.size() < 2){
         return false;
     }
 
@@ -110,13 +110,12 @@ void Hand::calculateHandValue(){
 
 
 void Hand::printHand(){
-    std::cout << "HAND IS " << std::endl;
     for(int i = 0; i < card.size(); i++){
         card[i]->printCard();
     }
 
     std::cout << std::endl << "Hand value is " << handValue << std::endl;
     if(busted){
-        std::cout << "The hand is busted" << std::endl;
+        std::cout << "The hand is busted" << std::endl << std::endl;
     }
 }

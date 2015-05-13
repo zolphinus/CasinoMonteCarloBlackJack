@@ -10,10 +10,15 @@ public:
     Deck(Deck& obj);
     ~Deck();
 
+    int numberOfDecks;
+
     std::vector<Card*> card;
 
     Card deal();
     void shuffle();
+    void readyDeck();
+    void initializeDeck(int numberOfDecks);
+    void destroy();
 };
 
 #endif // DECK
