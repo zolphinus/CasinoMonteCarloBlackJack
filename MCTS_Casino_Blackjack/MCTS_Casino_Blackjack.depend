@@ -5,13 +5,14 @@
 
 1431206259 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\card.h
 
-1431486813 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\main.cpp
+1431534914 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\main.cpp
 	"Card.h"
 	"Deck.h"
 	<time.h>
 	<cstdlib>
 	"Hand.h"
 	"HumanPlayer.h"
+	"HardDealer.h"
 	<iostream>
 
 1431487475 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\deck.cpp
@@ -23,30 +24,38 @@
 	<Vector>
 	"Card.h"
 
-1431486694 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.cpp
+1431530618 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.cpp
 	"Hand.h"
 	<iostream>
 
-1431307888 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.h
+1431530625 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\hand.h
 	<vector>
 	"Card.h"
 
-1431487425 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\player.cpp
+1431534859 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\player.cpp
 	"Player.h"
 	<iostream>
 
-1431487770 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\player.h
+1431532148 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\player.h
 	<string>
 	<vector>
 	"Card.h"
 	"Hand.h"
 	"Deck.h"
 
-1431486322 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\humanplayer.cpp
+1431528256 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\humanplayer.cpp
 	"HumanPlayer.h"
 	<iostream>
 	<limits>
 
-1431487116 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\humanplayer.h
+1431528245 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\humanplayer.h
+	"Player.h"
+
+1431529583 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\harddealer.cpp
+	"HardDealer.h"
+	<iostream>
+	<limits>
+
+1431529548 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\harddealer.h
 	"Player.h"
 

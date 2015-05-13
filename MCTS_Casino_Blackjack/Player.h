@@ -46,6 +46,7 @@ public:
     void clearActions();
     void printActions();
 
+    void compareHands(Hand* dealerHand);
 
     virtual void selectAction() = 0;
     virtual void formatScreen(){};
@@ -64,7 +65,7 @@ public:
     void updateBankroll(int results);
     void emptyHand();
     void printHands();
-    void printCurrentHand();
+    virtual void printCurrentHand();
 
     void checkIfFinished();
 };

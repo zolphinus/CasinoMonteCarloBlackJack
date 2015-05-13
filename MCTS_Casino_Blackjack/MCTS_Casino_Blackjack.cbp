@@ -37,6 +37,10 @@
 		<Unit filename="Deck.h" />
 		<Unit filename="Hand.cpp" />
 		<Unit filename="Hand.h" />
+		<Unit filename="HardDealer.cpp" />
+		<Unit filename="HardDealer.h" />
+		<Unit filename="HumanPlayer.cpp" />
+		<Unit filename="HumanPlayer.h" />
 		<Unit filename="Main.cpp" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />

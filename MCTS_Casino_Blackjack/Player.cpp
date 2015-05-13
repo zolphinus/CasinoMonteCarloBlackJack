@@ -30,6 +30,7 @@ Hand* Player::getNextHand(){
 void Player::hit(Card hitCard){
     if(currentHand != NULL){
         currentHand->addCard(hitCard);
+        currentHand->doubled = true; //can't double after hitting
         currentHand->calculateHandValue();
         if(currentHand->aceSplit || currentHand->busted){
             //can only hit once with ace split, and can't hit any more on a bust
@@ -60,19 +61,21 @@ void Player::splitHand(){
     if(currentHand != NULL){
         currentHand->blackjackPossible = false;
         Card* tempCard = new Card(currentHand->split());
+        currentHand->handRewardValue = currentHand->handRewardValue / 2;
         Hand* newHand = new Hand(*tempCard, bid);
+        newHand->handRewardValue = newHand->handRewardValue / 2;
         bankroll -= bid;
         currentHand->calculateHandValue();
         newHand->blackjackPossible = false;
         newHand->calculateHandValue();
         hand.push_back(newHand);
-
         //splits still require playing the current hand out
     }
 }
 
 
 void Player::initializeNewHand(){
+    roundsPlayed += 1.00;
     handSelector = 0;
     emptyHand();
     Hand* tempHand = new Hand(bid);
@@ -134,7 +137,6 @@ void Player::printCurrentHand(){
 
 void Player::checkIfFinished(){
     if(currentHand == NULL){
-        std::cout << "LL" << std::endl;
         isFinished = true;
     }else{
         isFinished = false;
@@ -150,8 +152,6 @@ void Player::getActions(){
         if(currentHand->canDouble()){
             available_actions.push_back(DOUBLE);
         }
-
-        std::cout << "Can split = " << currentHand->canSplit() << std::endl;
 
         if(currentHand->canSplit()){
             available_actions.push_back(SPLIT);
@@ -191,4 +191,60 @@ void Player::playAction(Deck& deck){
     }
 
     checkIfFinished();
+}
+
+
+void Player::compareHands(Hand* dealerHand){
+
+    if(dealerHand != NULL){
+        std::cout << "NOT NULL" << std::endl;
+    }else{
+        std::cout << "NULL" << std::endl;
+    }
+
+
+    for(int i = 0; i < hand.size(); i++){
+
+
+        if(dealerHand->handValue == 21 && dealerHand->card.size() == 2){
+            //dealer has natural blackjack
+            if(hand[i]->handValue == 21 && hand[i]->card.size() == 2 && hand[i]->blackjackPossible){
+                //player also has a natural blackjack, ties, and pushes
+                //but splits cannot have a natural blackjack so they aren't counted
+                this->bankroll += hand[i]->betValue;
+
+                //rewards half the hand reward because it's a tie
+                roundsWon += (hand[i]->handRewardValue / 2);
+            }
+        }else if(hand[i]->busted){
+            //lose, so do nothing
+        }else if(dealerHand->busted){
+            //if the dealer busts but the player didn't, player wins
+            this->bankroll += (2 * hand[i]->betValue);
+            roundsWon += hand[i]->handRewardValue;
+        }else if(hand[i]->handValue == 21 && hand[i]->card.size() == 2 && hand[i]->blackjackPossible){
+            //dealer has no blackjack but player does
+            this->bankroll += (3 * hand[i]->betValue);
+            roundsWon += hand[i]->handRewardValue;
+        }else{
+            //we must compare hand values to determine winner
+
+            if(hand[i]->handValue == dealerHand->handValue){
+                //push
+                this->bankroll += hand[i]->betValue;
+
+                //rewards half the hand reward because it's a tie
+                roundsWon += (hand[i]->handRewardValue / 2);
+            }else if(hand[i]->handValue > dealerHand->handValue){
+                //wins
+                this->bankroll += (2 * hand[i]->betValue);
+                roundsWon += hand[i]->handRewardValue;
+            }else{
+                //loses
+
+            }
+        }
+
+    }
+
 }

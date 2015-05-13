@@ -9,6 +9,7 @@ Hand::Hand(int betValue){
     blackjackPossible = true;
     aceSplit = false;
     handValue = 0;
+    handRewardValue = 1.00;
 }
 
 

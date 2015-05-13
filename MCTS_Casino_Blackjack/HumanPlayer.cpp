@@ -145,8 +145,4 @@ void HumanPlayer::formatScreen(){
                    std::endl << std::endl << std::endl;
 }
 
-bool HumanPlayer::playFinished(){
-    std::cout << "bool value is ";
-    std::cout << isFinished << std::endl;
-    return isFinished;
-}
+

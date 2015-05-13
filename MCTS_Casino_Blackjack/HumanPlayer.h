@@ -7,7 +7,6 @@ class HumanPlayer: public Player{
 public:
     HumanPlayer(int startingbankroll);
     void selectAction();
-    bool playFinished();
     void formatScreen();
 };
 

@@ -12,6 +12,7 @@ public:
     std::vector<Card*> card;
     int betValue;
     int handValue;
+    double handRewardValue;
 
     bool won;
     bool busted;
