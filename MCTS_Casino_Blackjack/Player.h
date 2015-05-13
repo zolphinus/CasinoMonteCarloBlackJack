@@ -50,8 +50,7 @@ public:
 
     virtual void selectAction() = 0;
     virtual void formatScreen(){};
-
-    void playAction(Deck&);
+    virtual void playAction(Deck&);
 
 
     void hit(Card);

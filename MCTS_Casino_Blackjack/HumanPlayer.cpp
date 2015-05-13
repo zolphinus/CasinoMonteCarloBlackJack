@@ -146,3 +146,22 @@ void HumanPlayer::formatScreen(){
 }
 
 
+void HumanPlayer::playAction(Deck& deck){
+    std::cout << std::endl;
+    if(selected_action == HIT){
+        std::cout << "Hitting" << std::endl << std::endl;
+        this->hit(deck.deal());
+    }else if(selected_action == STAY){
+        std::cout << "Staying" << std::endl << std::endl;
+        this->stay();
+    }else if(selected_action == DOUBLE){
+        std::cout << "Double Up" << std::endl << std::endl;
+        this->doubleUp(deck.deal());
+    }else if(selected_action == SPLIT){
+        std::cout << "Splitting" << std::endl << std::endl;
+        this->splitHand();
+    }
+
+    checkIfFinished();
+}
+

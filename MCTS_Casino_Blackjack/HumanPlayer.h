@@ -8,6 +8,7 @@ public:
     HumanPlayer(int startingbankroll);
     void selectAction();
     void formatScreen();
+    void playAction(Deck&);
 };
 
 #endif // HUMAN_PLAYER

@@ -175,18 +175,13 @@ void Player::printActions(){
 
 
 void Player::playAction(Deck& deck){
-    std::cout << std::endl;
     if(selected_action == HIT){
-        std::cout << "Hitting" << std::endl << std::endl;
         this->hit(deck.deal());
     }else if(selected_action == STAY){
-        std::cout << "Staying" << std::endl << std::endl;
         this->stay();
     }else if(selected_action == DOUBLE){
-        std::cout << "Double Up" << std::endl << std::endl;
         this->doubleUp(deck.deal());
     }else if(selected_action == SPLIT){
-        std::cout << "Splitting" << std::endl << std::endl;
         this->splitHand();
     }
 
@@ -195,16 +190,7 @@ void Player::playAction(Deck& deck){
 
 
 void Player::compareHands(Hand* dealerHand){
-
-    if(dealerHand != NULL){
-        std::cout << "NOT NULL" << std::endl;
-    }else{
-        std::cout << "NULL" << std::endl;
-    }
-
-
     for(int i = 0; i < hand.size(); i++){
-
 
         if(dealerHand->handValue == 21 && dealerHand->card.size() == 2){
             //dealer has natural blackjack
