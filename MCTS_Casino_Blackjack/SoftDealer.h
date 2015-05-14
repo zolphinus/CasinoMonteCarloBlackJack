@@ -6,7 +6,7 @@
 class SoftDealer : public Player{
 public:
     SoftDealer(int startingbankroll);
-    void selectAction();
+    void selectAction(Hand& dealerHand, Deck& deck);
     void printCurrentHand();
 };
 

@@ -9,7 +9,7 @@ SoftDealer::SoftDealer(int bankroll): Player(bankroll){
 }
 
 
-void SoftDealer::selectAction(){
+void SoftDealer::selectAction(Hand& dealerHand, Deck& deck){
     currentHand->calculateHandValue();
     selected_action = STAY;
     if(currentHand->handValue < 17){

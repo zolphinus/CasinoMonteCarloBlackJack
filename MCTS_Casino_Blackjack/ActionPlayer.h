@@ -8,7 +8,7 @@ public:
     ActionPlayer(int startingbankroll, ACTION);
 
     ACTION preferred_action;
-    void selectAction();
+    void selectAction(Hand& dealerHand, Deck& deck);
 };
 
 #endif // HIT_PLAYER

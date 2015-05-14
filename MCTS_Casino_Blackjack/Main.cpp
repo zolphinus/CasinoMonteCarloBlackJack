@@ -9,13 +9,18 @@
 #include "HardDealer.h"
 #include "SoftDealer.h"
 #include "ActionPlayer.h"
+#include "RandomPlayer.h"
+
+#include "BasicPlayer.h"
 
 #include <iostream>
 
 
-#define NUM_DECKS 1
+#define NUM_DECKS 6
 #define NUM_SIMS 10000
 #define START_BANKROLL 10000
+
+#define UNLIMITED_BANKROLL true
 
 
 void testGame();
@@ -32,7 +37,10 @@ void botGame(int, int, int, Player*&, Player*&);
 int main(){
     srand(time(NULL));
 
-    Player* player = new SoftDealer(10000);
+
+    //Test Hard Dealer
+
+    Player* player = new HardDealer(10000);
     Player* dealer = new SoftDealer(10000);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
@@ -46,6 +54,27 @@ int main(){
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
+    //Test Soft Dealer
+
+    delete player;
+    delete dealer;
+
+    player = new SoftDealer(10000);
+    dealer = new SoftDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new SoftDealer(10000);
+    dealer = new HardDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+
+    //Test Action Dealer
+
     delete player;
     delete dealer;
 
@@ -63,7 +92,8 @@ int main(){
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 
-    player = new ActionPlayer(10000, STAY);
+    //test Random Player
+    player = new RandomPlayer(10000);
     dealer = new SoftDealer(10000);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
@@ -71,10 +101,25 @@ int main(){
     delete player;
     delete dealer;
 
-    player = new ActionPlayer(10000, STAY);
+    player = new RandomPlayer(10000);
     dealer = new HardDealer(10000);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    //test Basic Player
+    player = new BasicPlayer(10000);
+    dealer = new SoftDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new BasicPlayer(10000);
+    dealer = new HardDealer(10000);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
 
 
 }
@@ -112,7 +157,7 @@ void testGame(){
 
             testPlayer->printCurrentHand();
             testPlayer->getActions();
-            testPlayer->selectAction();
+            testPlayer->selectAction(*testDealer->hand[0], deck);
             testPlayer->playAction(deck);
             handOver = testPlayer->isFinished;
         }
@@ -121,7 +166,7 @@ void testGame(){
             //dealer plays
             testDealer->printCurrentHand();
             testDealer->getActions();
-            testDealer->selectAction();
+            testDealer->selectAction(*testDealer->hand[0], deck);
             testDealer->playAction(deck);
             handOver = testDealer->isFinished;
         }
@@ -161,7 +206,7 @@ void humanHard(int decks, int bankroll, int simulations){
             //player plays
             humanPlayer->printCurrentHand();
             humanPlayer->getActions();
-            humanPlayer->selectAction();
+            humanPlayer->selectAction(*hardDealer->hand[0], deck);
             humanPlayer->playAction(deck);
             handOver = humanPlayer->isFinished;
         }
@@ -170,7 +215,7 @@ void humanHard(int decks, int bankroll, int simulations){
             //dealer plays
             hardDealer->printCurrentHand();
             hardDealer->getActions();
-            hardDealer->selectAction();
+            hardDealer->selectAction(*hardDealer->hand[0], deck);
             hardDealer->playAction(deck);
             handOver = hardDealer->isFinished;
         }
@@ -209,7 +254,7 @@ void humanSoft(int decks, int bankroll, int simulations){
             //player plays
             humanPlayer->printCurrentHand();
             humanPlayer->getActions();
-            humanPlayer->selectAction();
+            humanPlayer->selectAction(*softDealer->hand[0], deck);
             humanPlayer->playAction(deck);
             handOver = humanPlayer->isFinished;
         }
@@ -218,7 +263,7 @@ void humanSoft(int decks, int bankroll, int simulations){
             //dealer plays
             softDealer->printCurrentHand();
             softDealer->getActions();
-            softDealer->selectAction();
+            softDealer->selectAction(*softDealer->hand[0], deck);
             softDealer->playAction(deck);
             handOver = softDealer->isFinished;
         }
@@ -242,6 +287,16 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
     Player* player = newPlayer;
     Player* dealer = newDealer;
 
+    if(UNLIMITED_BANKROLL){
+        //create string here for separate data set
+    }
+
+    //open file based on the player/dealer name
+
+    //and load any prior statistics
+
+
+
     double highest_bankroll = 0;
 
     for(int i = 0; i < simulations; i ++){
@@ -251,7 +306,11 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         }
 
         if(player->bankroll < player->bid){
-            break;
+            if(UNLIMITED_BANKROLL){
+                player->bankroll = bankroll;
+            }else{
+                break;
+            }
         }
 
         deck.readyDeck();
@@ -266,7 +325,7 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         while(handOver == false){
             //player plays
             player->getActions();
-            player->selectAction();
+            player->selectAction(*dealer->hand[0], deck);
             player->playAction(deck);
             handOver = player->isFinished;
         }
@@ -274,7 +333,7 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         while(handOver == false){
             //dealer plays
             dealer->getActions();
-            dealer->selectAction();
+            dealer->selectAction(*dealer->hand[0], deck);
             dealer->playAction(deck);
             handOver = dealer->isFinished;
         }
@@ -289,7 +348,7 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         std::cout << "Highest Bankroll : " << highest_bankroll << std::endl << std::endl;
         std::cout << "Win rate is " << (player->roundsWon / player->roundsPlayed) * 100 << "%" << std::endl;
 
-        //print out statistics
+        //output average/min/max statistics to file
 
         std::cout << std::endl << std::endl;
 }

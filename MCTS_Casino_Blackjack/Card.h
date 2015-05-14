@@ -9,6 +9,8 @@ enum Suit{
     ERROR
 };
 
+//Character Z represents the number 10 on the face
+
 class Card{
 public:
     Card(int faceValue, int suit);

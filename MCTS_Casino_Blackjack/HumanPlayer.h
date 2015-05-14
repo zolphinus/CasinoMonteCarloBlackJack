@@ -6,7 +6,7 @@
 class HumanPlayer: public Player{
 public:
     HumanPlayer(int startingbankroll);
-    void selectAction();
+    void selectAction(Hand& dealerHand, Deck& deck);
     void formatScreen();
     void playAction(Deck&);
 };

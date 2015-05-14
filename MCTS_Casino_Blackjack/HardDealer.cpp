@@ -7,7 +7,7 @@ HardDealer::HardDealer(int bankroll): Player(bankroll){
 }
 
 
-void HardDealer::selectAction(){
+void HardDealer::selectAction(Hand& dealerHand, Deck& deck){
     currentHand->calculateHandValue();
     if(currentHand->handValue < 17){
         selected_action = HIT;

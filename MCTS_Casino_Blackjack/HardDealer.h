@@ -6,7 +6,7 @@
 class HardDealer : public Player{
 public:
     HardDealer(int startingbankroll);
-    void selectAction();
+    void selectAction(Hand& dealerHand, Deck& deck);
     void printCurrentHand();
 };
 

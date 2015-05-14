@@ -6,7 +6,7 @@ ActionPlayer::ActionPlayer(int bankroll, ACTION newAction): Player(bankroll){
 }
 
 
-void ActionPlayer::selectAction(){
+void ActionPlayer::selectAction(Hand& dealerHand, Deck& deck){
     currentHand->calculateHandValue();
 
     if(currentHand->handValue < 21){
