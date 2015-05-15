@@ -8,7 +8,8 @@
 class RandomPlayer : public Player{
 public:
     RandomPlayer(int startingbankroll);
-    void selectAction(Hand& dealerHand, Deck& deck);
+    void selectAction(Player& dealer, Deck& deck);
+    Player* clone() const;
 };
 
 

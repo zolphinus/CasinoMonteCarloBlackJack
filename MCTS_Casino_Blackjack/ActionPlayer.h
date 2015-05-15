@@ -8,7 +8,8 @@ public:
     ActionPlayer(int startingbankroll, ACTION);
 
     ACTION preferred_action;
-    void selectAction(Hand& dealerHand, Deck& deck);
+    void selectAction(Player& dealer, Deck& deck);
+    Player* clone() const;
 };
 
 #endif // HIT_PLAYER

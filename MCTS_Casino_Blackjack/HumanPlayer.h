@@ -6,9 +6,10 @@
 class HumanPlayer: public Player{
 public:
     HumanPlayer(int startingbankroll);
-    void selectAction(Hand& dealerHand, Deck& deck);
+    void selectAction(Player& dealer, Deck& deck);
     void formatScreen();
     void playAction(Deck&);
+    Player* clone() const;
 };
 
 #endif // HUMAN_PLAYER

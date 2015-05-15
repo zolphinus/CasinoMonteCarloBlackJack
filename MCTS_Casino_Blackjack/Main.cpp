@@ -18,9 +18,9 @@
 
 #define NUM_DECKS 6
 #define NUM_SIMS 10000
-#define START_BANKROLL 10000
+#define START_BANKROLL 50000
 
-#define UNLIMITED_BANKROLL true
+#define UNLIMITED_BANKROLL false
 
 
 void testGame();
@@ -40,8 +40,8 @@ int main(){
 
     //Test Hard Dealer
 
-    Player* player = new HardDealer(10000);
-    Player* dealer = new SoftDealer(10000);
+    Player* player = new HardDealer(START_BANKROLL);
+    Player* dealer = new SoftDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
@@ -49,8 +49,8 @@ int main(){
     delete player;
     delete dealer;
 
-    player = new HardDealer(10000);
-    dealer = new HardDealer(10000);
+    player = new HardDealer(START_BANKROLL);
+    dealer = new HardDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
@@ -59,16 +59,16 @@ int main(){
     delete player;
     delete dealer;
 
-    player = new SoftDealer(10000);
-    dealer = new SoftDealer(10000);
+    player = new SoftDealer(START_BANKROLL);
+    dealer = new SoftDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
     delete player;
     delete dealer;
 
-    player = new SoftDealer(10000);
-    dealer = new HardDealer(10000);
+    player = new SoftDealer(START_BANKROLL);
+    dealer = new HardDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
@@ -78,45 +78,45 @@ int main(){
     delete player;
     delete dealer;
 
-    player = new ActionPlayer(10000, HIT);
-    dealer = new SoftDealer(10000);
+    player = new ActionPlayer(START_BANKROLL, HIT);
+    dealer = new SoftDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
     delete player;
     delete dealer;
 
-    player = new ActionPlayer(10000, HIT);
-    dealer = new HardDealer(10000);
+    player = new ActionPlayer(START_BANKROLL, HIT);
+    dealer = new HardDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 
     //test Random Player
-    player = new RandomPlayer(10000);
-    dealer = new SoftDealer(10000);
+    player = new RandomPlayer(START_BANKROLL);
+    dealer = new SoftDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
     delete player;
     delete dealer;
 
-    player = new RandomPlayer(10000);
-    dealer = new HardDealer(10000);
+    player = new RandomPlayer(START_BANKROLL);
+    dealer = new HardDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
     //test Basic Player
-    player = new BasicPlayer(10000);
-    dealer = new SoftDealer(10000);
+    player = new BasicPlayer(START_BANKROLL);
+    dealer = new SoftDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
     delete player;
     delete dealer;
 
-    player = new BasicPlayer(10000);
-    dealer = new HardDealer(10000);
+    player = new BasicPlayer(START_BANKROLL);
+    dealer = new HardDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
@@ -157,7 +157,7 @@ void testGame(){
 
             testPlayer->printCurrentHand();
             testPlayer->getActions();
-            testPlayer->selectAction(*testDealer->hand[0], deck);
+            testPlayer->selectAction(*testDealer, deck);
             testPlayer->playAction(deck);
             handOver = testPlayer->isFinished;
         }
@@ -166,7 +166,7 @@ void testGame(){
             //dealer plays
             testDealer->printCurrentHand();
             testDealer->getActions();
-            testDealer->selectAction(*testDealer->hand[0], deck);
+            testDealer->selectAction(*testDealer, deck);
             testDealer->playAction(deck);
             handOver = testDealer->isFinished;
         }
@@ -206,7 +206,7 @@ void humanHard(int decks, int bankroll, int simulations){
             //player plays
             humanPlayer->printCurrentHand();
             humanPlayer->getActions();
-            humanPlayer->selectAction(*hardDealer->hand[0], deck);
+            humanPlayer->selectAction(*hardDealer, deck);
             humanPlayer->playAction(deck);
             handOver = humanPlayer->isFinished;
         }
@@ -215,7 +215,7 @@ void humanHard(int decks, int bankroll, int simulations){
             //dealer plays
             hardDealer->printCurrentHand();
             hardDealer->getActions();
-            hardDealer->selectAction(*hardDealer->hand[0], deck);
+            hardDealer->selectAction(*hardDealer, deck);
             hardDealer->playAction(deck);
             handOver = hardDealer->isFinished;
         }
@@ -254,7 +254,7 @@ void humanSoft(int decks, int bankroll, int simulations){
             //player plays
             humanPlayer->printCurrentHand();
             humanPlayer->getActions();
-            humanPlayer->selectAction(*softDealer->hand[0], deck);
+            humanPlayer->selectAction(*softDealer, deck);
             humanPlayer->playAction(deck);
             handOver = humanPlayer->isFinished;
         }
@@ -263,7 +263,7 @@ void humanSoft(int decks, int bankroll, int simulations){
             //dealer plays
             softDealer->printCurrentHand();
             softDealer->getActions();
-            softDealer->selectAction(*softDealer->hand[0], deck);
+            softDealer->selectAction(*softDealer, deck);
             softDealer->playAction(deck);
             handOver = softDealer->isFinished;
         }
@@ -288,7 +288,7 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
     Player* dealer = newDealer;
 
     if(UNLIMITED_BANKROLL){
-        //create string here for separate data set
+        //create string here for separate file name
     }
 
     //open file based on the player/dealer name
@@ -325,15 +325,18 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         while(handOver == false){
             //player plays
             player->getActions();
-            player->selectAction(*dealer->hand[0], deck);
+            player->selectAction(*dealer, deck);
             player->playAction(deck);
             handOver = player->isFinished;
         }
         handOver = false;
         while(handOver == false){
             //dealer plays
+
+            //dealers facedown card is now finalized
+            dealer->addCardToNewHand(deck.deal());
             dealer->getActions();
-            dealer->selectAction(*dealer->hand[0], deck);
+            dealer->selectAction(*dealer, deck);
             dealer->playAction(deck);
             handOver = dealer->isFinished;
         }

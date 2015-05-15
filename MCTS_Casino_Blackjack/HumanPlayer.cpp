@@ -6,7 +6,7 @@ HumanPlayer::HumanPlayer(int bankroll): Player(bankroll){
     playerName = "Human";
 }
 
-void HumanPlayer::selectAction(Hand& dealerHand, Deck& deck){
+void HumanPlayer::selectAction(Player& dealer, Deck& deck){
     std::cout << "What would you like to do? (Type a number and then press enter)" << std::endl << std::endl;
     bool validInput;
     for(int i = 0; i < this->available_actions.size(); i++){
@@ -164,3 +164,7 @@ void HumanPlayer::playAction(Deck& deck){
     checkIfFinished();
 }
 
+Player* HumanPlayer::clone() const {
+    Player* temp = new HumanPlayer(*this);
+        return temp;
+}

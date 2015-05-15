@@ -6,8 +6,9 @@
 class HardDealer : public Player{
 public:
     HardDealer(int startingbankroll);
-    void selectAction(Hand& dealerHand, Deck& deck);
+    void selectAction(Player& dealer, Deck& deck);
     void printCurrentHand();
+    Player* clone() const;
 };
 
 #endif // HARD_DEALER

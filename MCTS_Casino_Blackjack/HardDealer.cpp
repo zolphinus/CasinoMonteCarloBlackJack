@@ -7,7 +7,7 @@ HardDealer::HardDealer(int bankroll): Player(bankroll){
 }
 
 
-void HardDealer::selectAction(Hand& dealerHand, Deck& deck){
+void HardDealer::selectAction(Player& dealer, Deck& deck){
     currentHand->calculateHandValue();
     if(currentHand->handValue < 17){
         selected_action = HIT;
@@ -24,4 +24,10 @@ void HardDealer::printCurrentHand(){
     }
 
     std::cout << std::endl << std::endl;
+}
+
+
+Player* HardDealer::clone() const {
+    Player* temp = new HardDealer(*this);
+        return temp;
 }

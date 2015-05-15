@@ -5,7 +5,7 @@ RandomPlayer::RandomPlayer(int bankroll): Player(bankroll){
 }
 
 
-void RandomPlayer::selectAction(Hand& dealerHand, Deck& deck){
+void RandomPlayer::selectAction(Player& dealer, Deck& deck){
     int selector = rand() % available_actions.size();
 
     switch(selector){
@@ -25,4 +25,9 @@ void RandomPlayer::selectAction(Hand& dealerHand, Deck& deck){
         selected_action = NO_ACTION;
     }
 
+}
+
+Player* RandomPlayer::clone() const {
+    Player* temp = new RandomPlayer(*this);
+        return temp;
 }

@@ -9,7 +9,7 @@ SoftDealer::SoftDealer(int bankroll): Player(bankroll){
 }
 
 
-void SoftDealer::selectAction(Hand& dealerHand, Deck& deck){
+void SoftDealer::selectAction(Player& dealer, Deck& deck){
     currentHand->calculateHandValue();
     selected_action = STAY;
     if(currentHand->handValue < 17){
@@ -50,3 +50,7 @@ void SoftDealer::printCurrentHand(){
     std::cout << std::endl << std::endl;
 }
 
+Player* SoftDealer::clone() const {
+    Player* temp = new SoftDealer(*this);
+        return temp;
+}

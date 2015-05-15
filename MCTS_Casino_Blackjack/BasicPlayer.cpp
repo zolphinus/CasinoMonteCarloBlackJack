@@ -5,11 +5,11 @@ BasicPlayer::BasicPlayer(int bankroll): Player(bankroll){
 }
 
 
-void BasicPlayer::selectAction(Hand& dealerHand, Deck& deck){
+void BasicPlayer::selectAction(Player& dealer, Deck& deck){
     selected_action = STAY; //default action
 
     //dealer's faceup card value
-    char upcard = dealerHand.card[0]->faceValue;
+    char upcard = dealer.hand[0]->card[0]->faceValue;
 
     if(currentHand->canSplit()){
         //logic for hand split table
@@ -133,4 +133,9 @@ void BasicPlayer::selectAction(Hand& dealerHand, Deck& deck){
         }
 
     }
+}
+
+Player* BasicPlayer::clone() const {
+    Player* temp = new BasicPlayer(*this);
+        return temp;
 }

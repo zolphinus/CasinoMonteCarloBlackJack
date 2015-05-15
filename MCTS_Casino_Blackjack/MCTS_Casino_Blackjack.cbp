@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="ActionPlayer.cpp" />
+		<Unit filename="ActionPlayer.h" />
+		<Unit filename="BasicPlayer.cpp" />
+		<Unit filename="BasicPlayer.h" />
 		<Unit filename="Card.cpp" />
 		<Unit filename="Card.h" />
 		<Unit filename="Deck.cpp" />
@@ -44,6 +48,10 @@
 		<Unit filename="Main.cpp" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />
+		<Unit filename="RandomPlayer.cpp" />
+		<Unit filename="RandomPlayer.h" />
+		<Unit filename="SoftDealer.cpp" />
+		<Unit filename="SoftDealer.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

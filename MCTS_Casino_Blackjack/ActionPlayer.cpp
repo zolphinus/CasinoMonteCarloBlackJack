@@ -6,7 +6,7 @@ ActionPlayer::ActionPlayer(int bankroll, ACTION newAction): Player(bankroll){
 }
 
 
-void ActionPlayer::selectAction(Hand& dealerHand, Deck& deck){
+void ActionPlayer::selectAction(Player& dealer, Deck& deck){
     currentHand->calculateHandValue();
 
     if(currentHand->handValue < 21){
@@ -14,4 +14,10 @@ void ActionPlayer::selectAction(Hand& dealerHand, Deck& deck){
     }else{
         selected_action = STAY;
     }
+}
+
+
+Player* ActionPlayer::clone() const {
+    Player* temp = new ActionPlayer(*this);
+        return temp;
 }

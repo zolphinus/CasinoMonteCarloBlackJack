@@ -6,8 +6,9 @@
 class SoftDealer : public Player{
 public:
     SoftDealer(int startingbankroll);
-    void selectAction(Hand& dealerHand, Deck& deck);
+    void selectAction(Player& dealer, Deck& deck);
     void printCurrentHand();
+    Player* clone() const;
 };
 
 #endif // SOFT_DEALER
