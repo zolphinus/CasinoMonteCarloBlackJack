@@ -14,16 +14,21 @@ void MCPlayer::selectAction(Player& dealer, Deck& deck){
 
 
 ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
+    //std::cout << "monte carlo" << std::endl;
+
     ACTION chosen_action = STAY;
     //create containers for nodes for each action
     std::vector<ACTION_NODE*> unplayedActions;
     std::vector<ACTION_NODE*> playedActions;
-
     //create nodes for each action
+    unplayedActions.resize(player.available_actions.size());
+    playedActions.resize(player.available_actions.size());
+
+
     for(int i = 0; i < player.available_actions.size(); i++){
         ACTION_NODE* newAction = new ACTION_NODE();
         newAction->action = player.available_actions[i];
-        unplayedActions.push_back(newAction);
+        unplayedActions[i] = newAction;
     }
 
     Player* playerCopy;
@@ -31,10 +36,12 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
     Deck* deckCopy;
 
 
+
     //run simulations
     ACTION_NODE* action_to_play;
     int selector = 0;
     if(unplayedActions.size() > 0){
+
         //then create a copy of myHand, dealerHand, and the deck
         //these will serve as the copies to run the monte carlo sims
         while(unplayedActions.size() > 0){
@@ -58,27 +65,86 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
 
             //grab the action so that we can mark it as played
             action_to_play = unplayedActions.back();
+            playedActions[unplayedActions.size() - 1] = action_to_play;
             unplayedActions.pop_back();
 
 
             //then play the action
             if(action_to_play->action == HIT){
+                Hand* handCopy1 = playerCopy->currentHand;
                 playerCopy->hit(deckCopy->deal());
-
-                Hand* handCopy = playerCopy->currentHand;
                 ACTION tempAction = action_to_play->action;
-                while(tempAction != STAY && playerCopy->currentHand != handCopy){
+                //std::cout << "hit" << std::endl;
+
+                while(handCopy1->busted == false && tempAction != STAY){
+                        //std::cout << "test" << std::endl;
                     //busting on a  hit will advance current hand to the next hand, or to null
 
+                    //std::cout << "Good?" << std::endl;
                     playerCopy->getActions();
+                    //std::cout << "STILL GOOD" << std::endl;
 
-                    tempAction = monteCarlo(*playerCopy, *dealerCopy, deck);
+                    tempAction == HIT;
+
                     if(tempAction == HIT){
                         playerCopy->hit(deckCopy->deal());
                     }else{
                         //once you hit, you can't double/split, so stay is the only other option
                         tempAction = STAY;
+                        playerCopy->stay();
                     }
+                }
+                Hand* handCopy2 = playerCopy->currentHand;
+
+                //dealer plays hand out
+                bool handOver = false;
+                while(handOver == false){
+                    //dealer plays
+
+                    //dealers facedown card is now finalized
+                    dealerCopy->addCardToNewHand(deckCopy->deal());
+                    dealerCopy->getActions();
+                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->playAction(deck);
+                    handOver = dealerCopy->isFinished;
+                }
+
+                playerCopy->currentHand = handCopy1;
+                playerCopy->compareSingleHand(dealerCopy->hand[0]);
+                playerCopy->currentHand = handCopy2;
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+            }else if(action_to_play->action == STAY){
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareSingleHand(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+            }else if(action_to_play->action == DOUBLE){
+                playerCopy->doubleUp(deckCopy->deal());
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareSingleHand(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+
+            }else if(action_to_play->action == SPLIT){
+                playerCopy->splitHand();
+
+
+                ACTION tempAction = action_to_play->action;
+                //multiple hands
+                while(playerCopy->currentHand != NULL){
+                    playerCopy->getActions();
+
+                    //randomly select moves until stay/bust
+                    playerCopy->selected_action = HIT;
+
+
+                    playerCopy->playAction(*deckCopy);
                 }
 
                 //dealer plays hand out
@@ -94,38 +160,6 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     handOver = dealerCopy->isFinished;
                 }
 
-
-                playerCopy->compareHands(dealerCopy->hand[0]);
-                action_to_play->timesPlayed += 1.00;
-                action_to_play->timesWon += playerCopy->roundsWon;
-                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
-            }else if(action_to_play->action == STAY){
-                dealerCopy->addCardToNewHand(deckCopy->deal());
-
-                playerCopy->compareHands(dealerCopy->hand[0]);
-                action_to_play->timesPlayed += 1.00;
-                action_to_play->timesWon += playerCopy->roundsWon;
-                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
-            }else if(action_to_play->action == DOUBLE){
-                playerCopy->doubleUp(deckCopy->deal());
-                dealerCopy->addCardToNewHand(deckCopy->deal());
-
-                playerCopy->compareHands(dealerCopy->hand[0]);
-                action_to_play->timesPlayed += 1.00;
-                action_to_play->timesWon += playerCopy->roundsWon;
-                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
-
-            }else if(action_to_play->action == SPLIT){
-                playerCopy->splitHand();
-
-                //hand 1
-                playerCopy->getActions();
-
-                //hand 2
-                playerCopy->getActions();
-
-                dealerCopy->addCardToNewHand(deckCopy->deal());
-
                 playerCopy->compareHands(dealerCopy->hand[0]);
                 action_to_play->timesPlayed += 1.00;
                 action_to_play->timesWon += playerCopy->roundsWon;
@@ -133,7 +167,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
 
             }
 
-            playedActions.push_back(action_to_play);
+
             delete playerCopy;
             delete dealerCopy;
             delete deckCopy;
@@ -144,7 +178,6 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
     //all actions have been tried at least once
     //so we use the UTC algorithm to decide
     int totalTickets = (playedActions.size() - 1) * 2;
-
     for(int i = 0; i < NUM_MC_SIMS; i++){
         //then create a copy of myHand, dealerHand, and the deck
         //these will serve as the copies to run the monte carlo sims
@@ -152,7 +185,6 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
         playerCopy = player.clone();
         dealerCopy = dealer.clone();
         deckCopy = new Deck(deck);
-
 
         //first we assign available tickets, weighting the action with the best win %
         assignTickets(playedActions, totalTickets);
@@ -168,17 +200,101 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
             }
         }
 
-        //dealer's unknown card is dealt first, but isn't used in the Monte Carlo logic
-        dealerCopy->addCardToNewHand(deckCopy->deal());
+
+
         if(action_to_play->action == HIT){
+                Hand* handCopy1 = playerCopy->currentHand;
+                playerCopy->hit(deckCopy->deal());
+                ACTION tempAction = action_to_play->action;
 
-        }else if(action_to_play->action == STAY){
 
-        }else if(action_to_play->action == DOUBLE){
+                while(handCopy1->busted == false && tempAction != STAY){
+                    //busting on a  hit will advance current hand to the next hand, or to null
 
-        }else if(action_to_play->action == SPLIT){
+                    //std::cout << "french" << std::endl;
+                    playerCopy->getActions();
+                    //std::cout << "fries" << std::endl;
 
-        }
+                    tempAction = HIT;
+                    if(tempAction == HIT){
+                        playerCopy->hit(deckCopy->deal());
+                    }else{
+                        //once you hit, you can't double/split, so stay is the only other option
+                        tempAction = STAY;
+                        playerCopy->stay();
+                    }
+                }
+                Hand* handCopy2 = playerCopy->currentHand;
+
+                //dealer plays hand out
+                bool handOver = false;
+                while(handOver == false){
+                    //dealer plays
+
+                    //dealers facedown card is now finalized
+                    dealerCopy->addCardToNewHand(deckCopy->deal());
+                    dealerCopy->getActions();
+                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->playAction(deck);
+                    handOver = dealerCopy->isFinished;
+                }
+
+                playerCopy->currentHand = handCopy1;
+                playerCopy->compareSingleHand(dealerCopy->hand[0]);
+                playerCopy->currentHand = handCopy2;
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+            }else if(action_to_play->action == STAY){
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareSingleHand(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+            }else if(action_to_play->action == DOUBLE){
+                playerCopy->doubleUp(deckCopy->deal());
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareSingleHand(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+
+            }else if(action_to_play->action == SPLIT){
+                playerCopy->splitHand();
+
+
+                ACTION tempAction = action_to_play->action;
+                //multiple hands
+                while(playerCopy->currentHand != NULL){
+                    playerCopy->getActions();
+
+                    //randomly pick moves until stay/bust
+                    playerCopy->selected_action = HIT;
+
+                    playerCopy->playAction(*deckCopy);
+                }
+
+                //dealer plays hand out
+                bool handOver = false;
+                while(handOver == false){
+                    //dealer plays
+
+                    //dealers facedown card is now finalized
+                    dealerCopy->addCardToNewHand(deckCopy->deal());
+                    dealerCopy->getActions();
+                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->playAction(deck);
+                    handOver = dealerCopy->isFinished;
+                }
+
+                playerCopy->compareHands(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+
+            }
 
 
         delete playerCopy;
@@ -211,12 +327,13 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
     }
     playedActions.clear();
 
-
+    delete action_to_play;
     return chosen_action;
 }
 
 
 void MCPlayer::assignTickets(std::vector<ACTION_NODE*>& playedActions, int totalTickets){
+
     //create tickets for the UTC algorithm
     int winnerTickets = totalTickets / 2;
     totalTickets = totalTickets - winnerTickets;

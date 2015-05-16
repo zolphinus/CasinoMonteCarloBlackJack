@@ -70,6 +70,8 @@ void Player::splitHand(){
         newHand->calculateHandValue();
         hand.push_back(newHand);
         //splits still require playing the current hand out
+    }else{
+        std::cout << "morph" << std::endl;
     }
 }
 
@@ -157,7 +159,8 @@ void Player::getActions(){
             available_actions.push_back(SPLIT);
         }
     }else{
-        available_actions.push_back(NO_ACTION);
+        std::cout << "HAND IS NULL" << std::endl;
+        //available_actions.push_back(NO_ACTION);
     }
 }
 
@@ -191,7 +194,9 @@ void Player::playAction(Deck& deck){
 
 void Player::compareHands(Hand* dealerHand){
     for(int i = 0; i < hand.size(); i++){
-
+        if(hand[i]->handRewardValue > 1){
+            hand[i]->handRewardValue = 1;
+        }
         if(dealerHand->handValue == 21 && dealerHand->card.size() == 2){
             //dealer has natural blackjack
             if(hand[i]->handValue == 21 && hand[i]->card.size() == 2 && hand[i]->blackjackPossible){
@@ -231,6 +236,54 @@ void Player::compareHands(Hand* dealerHand){
             }
         }
 
+    }
+
+}
+
+
+void Player::compareSingleHand(Hand* dealerHand){
+    if(currentHand == NULL){
+        return;
+    }
+
+
+    if(dealerHand->handValue == 21 && dealerHand->card.size() == 2){
+        //dealer has natural blackjack
+        if(currentHand->handValue == 21 && currentHand->card.size() == 2 && currentHand->blackjackPossible){
+            //player also has a natural blackjack, ties, and pushes
+            //but splits cannot have a natural blackjack so they aren't counted
+            this->bankroll += currentHand->betValue;
+
+            //rewards half the hand reward because it's a tie
+            roundsWon += (currentHand->handRewardValue / 2);
+        }
+    }else if(currentHand->busted){
+        //lose, so do nothing
+    }else if(dealerHand->busted){
+        //if the dealer busts but the player didn't, player wins
+        this->bankroll += (2 * currentHand->betValue);
+        roundsWon += currentHand->handRewardValue;
+    }else if(currentHand->handValue == 21 && currentHand->card.size() == 2 && currentHand->blackjackPossible){
+        //dealer has no blackjack but player does
+        this->bankroll += (3 * currentHand->betValue);
+        roundsWon += currentHand->handRewardValue;
+    }else{
+        //we must compare hand values to determine winner
+
+        if(currentHand->handValue == dealerHand->handValue){
+            //push
+            this->bankroll += currentHand->betValue;
+
+            //rewards half the hand reward because it's a tie
+            roundsWon += (currentHand->handRewardValue / 2);
+        }else if(currentHand->handValue > dealerHand->handValue){
+            //wins
+            this->bankroll += (2 * currentHand->betValue);
+            roundsWon += currentHand->handRewardValue;
+        }else{
+            //loses
+
+        }
     }
 
 }

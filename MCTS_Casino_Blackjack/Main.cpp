@@ -18,7 +18,7 @@
 
 
 #define NUM_DECKS 6
-#define NUM_SIMS 10000
+#define NUM_SIMS 5000
 #define START_BANKROLL 50000
 
 #define UNLIMITED_BANKROLL false
@@ -40,15 +40,6 @@ int main(){
     srand(time(NULL));
     Deck deck(1);
     deck.shuffle();
-
-    Player* original = new MCPlayer(10000);
-    original->initializeNewHand();
-    original->addCardToNewHand(deck.deal());
-
-    testClone(original);
-
-    /*
-
     //Test Hard Dealer
 
     Player* player = new HardDealer(START_BANKROLL);
@@ -132,8 +123,21 @@ int main(){
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
-*/
+    delete player;
+    delete dealer;
 
+    player = new MCPlayer(START_BANKROLL);
+    dealer = new HardDealer(START_BANKROLL);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new MCPlayer(START_BANKROLL);
+    dealer = new SoftDealer(START_BANKROLL);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 }
 

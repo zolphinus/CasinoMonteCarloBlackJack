@@ -48,6 +48,7 @@ public:
     void printActions();
 
     void compareHands(Hand* dealerHand);
+    void compareSingleHand(Hand* dealerHand);
 
     //only the Basic Player and AI variants use the hand/deck when selecting an action
     //but declaring a pure virtual function makes sense for more generic bots
