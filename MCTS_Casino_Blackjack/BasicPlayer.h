@@ -8,6 +8,8 @@ public:
     BasicPlayer(int startingbankroll);
     void selectAction(Player& dealer, Deck& deck);
     Player* clone() const;
+private:
+    Player* cloneMe() const;
 };
 
 #endif // BASIC_PLAYER

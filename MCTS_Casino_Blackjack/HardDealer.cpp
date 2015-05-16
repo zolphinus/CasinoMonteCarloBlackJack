@@ -27,7 +27,20 @@ void HardDealer::printCurrentHand(){
 }
 
 
-Player* HardDealer::clone() const {
+Player* HardDealer::cloneMe() const {
     Player* temp = new HardDealer(*this);
         return temp;
+}
+
+Player* HardDealer::clone() const{
+    Player* temp = cloneMe();
+    temp->hand.clear();
+
+    for(int i = 0; i < this->hand.size(); i++){
+        Hand* tempHand =  new Hand(*this->hand[i]);
+        temp->hand.push_back(tempHand);
+    }
+
+    temp->currentHand = temp->hand[0];
+    return temp;
 }

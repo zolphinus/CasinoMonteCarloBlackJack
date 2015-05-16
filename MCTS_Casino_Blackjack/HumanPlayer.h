@@ -10,6 +10,8 @@ public:
     void formatScreen();
     void playAction(Deck&);
     Player* clone() const;
+private:
+    Player* cloneMe() const;
 };
 
 #endif // HUMAN_PLAYER

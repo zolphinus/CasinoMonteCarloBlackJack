@@ -17,7 +17,20 @@ void ActionPlayer::selectAction(Player& dealer, Deck& deck){
 }
 
 
-Player* ActionPlayer::clone() const {
+Player* ActionPlayer::cloneMe() const {
     Player* temp = new ActionPlayer(*this);
         return temp;
+}
+
+Player* ActionPlayer::clone() const{
+    Player* temp = cloneMe();
+    temp->hand.clear();
+
+    for(int i = 0; i < this->hand.size(); i++){
+        Hand* tempHand =  new Hand(*this->hand[i]);
+        temp->hand.push_back(tempHand);
+    }
+
+    temp->currentHand = temp->hand[0];
+    return temp;
 }

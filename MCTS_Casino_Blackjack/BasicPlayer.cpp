@@ -135,7 +135,20 @@ void BasicPlayer::selectAction(Player& dealer, Deck& deck){
     }
 }
 
-Player* BasicPlayer::clone() const {
+Player* BasicPlayer::cloneMe() const {
     Player* temp = new BasicPlayer(*this);
         return temp;
+}
+
+Player* BasicPlayer::clone() const{
+    Player* temp = cloneMe();
+    temp->hand.clear();
+
+    for(int i = 0; i < this->hand.size(); i++){
+        Hand* tempHand =  new Hand(*this->hand[i]);
+        temp->hand.push_back(tempHand);
+    }
+
+    temp->currentHand = temp->hand[0];
+    return temp;
 }

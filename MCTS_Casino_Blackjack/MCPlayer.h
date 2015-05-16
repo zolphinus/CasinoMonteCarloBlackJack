@@ -16,12 +16,16 @@ struct ACTION_NODE{
 class MCPlayer : public Player{
 public:
     MCPlayer(int startingbankroll);
+
     void selectAction(Player& dealer, Deck& deck);
 
     ACTION monteCarlo(Player& player, Player& dealer, Deck& deck);
 
     void assignTickets(std::vector<ACTION_NODE*>& playedActions, int);
     Player* clone() const;
+private:
+    Player* cloneMe() const;
+
 };
 
 

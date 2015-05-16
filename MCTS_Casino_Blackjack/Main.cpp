@@ -12,6 +12,7 @@
 #include "RandomPlayer.h"
 
 #include "BasicPlayer.h"
+#include "MCPlayer.h"
 
 #include <iostream>
 
@@ -24,6 +25,7 @@
 
 
 void testGame();
+void testClone(const Player*);
 
 //human versus dealers
 void humanHard(int decks, int bankroll, int simulations);
@@ -36,7 +38,16 @@ void botGame(int, int, int, Player*&, Player*&);
 
 int main(){
     srand(time(NULL));
+    Deck deck(1);
+    deck.shuffle();
 
+    Player* original = new MCPlayer(10000);
+    original->initializeNewHand();
+    original->addCardToNewHand(deck.deal());
+
+    testClone(original);
+
+    /*
 
     //Test Hard Dealer
 
@@ -112,6 +123,7 @@ int main(){
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
+
     delete player;
     delete dealer;
 
@@ -120,6 +132,7 @@ int main(){
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
+*/
 
 
 }
@@ -356,3 +369,26 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         std::cout << std::endl << std::endl;
 }
 
+void testClone(const Player* original){
+    Deck deck(1);
+    deck.shuffle();
+
+    Player* clone = (original->clone());
+    Player* clone2 = (original->clone());
+
+    //clone = original->clone();
+    clone->addCardToNewHand(deck.deal());
+
+    std::cout << "Clone 1 name is " << clone->playerName << std::endl << "CLONING" << std::endl << std::endl;
+
+    clone2->playerName = "fazilla";
+
+    clone->printCurrentHand();
+
+    clone2->addCardToNewHand(deck.deal());
+
+
+    std::cout << "Clone 2 name is " << clone2->playerName << std::endl << "CLONED" << std::endl << std::endl;
+    clone2->printCurrentHand();
+
+}

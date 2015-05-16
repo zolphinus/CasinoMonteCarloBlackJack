@@ -10,6 +10,8 @@ public:
     RandomPlayer(int startingbankroll);
     void selectAction(Player& dealer, Deck& deck);
     Player* clone() const;
+private:
+    Player* cloneMe() const;
 };
 
 

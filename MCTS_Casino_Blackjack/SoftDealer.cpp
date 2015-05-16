@@ -50,7 +50,20 @@ void SoftDealer::printCurrentHand(){
     std::cout << std::endl << std::endl;
 }
 
-Player* SoftDealer::clone() const {
+Player* SoftDealer::cloneMe() const {
     Player* temp = new SoftDealer(*this);
         return temp;
+}
+
+Player* SoftDealer::clone() const{
+    Player* temp = cloneMe();
+    temp->hand.clear();
+
+    for(int i = 0; i < this->hand.size(); i++){
+        Hand* tempHand =  new Hand(*this->hand[i]);
+        temp->hand.push_back(tempHand);
+    }
+
+    temp->currentHand = temp->hand[0];
+    return temp;
 }

@@ -10,6 +10,8 @@ public:
     ACTION preferred_action;
     void selectAction(Player& dealer, Deck& deck);
     Player* clone() const;
+private:
+    Player* cloneMe() const;
 };
 
 #endif // HIT_PLAYER

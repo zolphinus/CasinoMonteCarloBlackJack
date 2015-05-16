@@ -9,6 +9,8 @@ public:
     void selectAction(Player& dealer, Deck& deck);
     void printCurrentHand();
     Player* clone() const;
+private:
+    Player* cloneMe() const;
 };
 
 #endif // HARD_DEALER

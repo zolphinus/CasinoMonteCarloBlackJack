@@ -20,15 +20,15 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
     std::vector<ACTION_NODE*> playedActions;
 
     //create nodes for each action
-    for(int i = 0; i < available_actions.size(); i++){
+    for(int i = 0; i < player.available_actions.size(); i++){
         ACTION_NODE* newAction = new ACTION_NODE();
-        newAction->action = available_actions[i];
+        newAction->action = player.available_actions[i];
         unplayedActions.push_back(newAction);
     }
 
-        Player* playerCopy = player.clone();
-        Player* dealerCopy = dealer.clone();
-        Deck deckCopy(deck);
+    Player* playerCopy;
+    Player* dealerCopy;
+    Deck* deckCopy;
 
 
     //run simulations
@@ -37,28 +37,139 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
     if(unplayedActions.size() > 0){
         //then create a copy of myHand, dealerHand, and the deck
         //these will serve as the copies to run the monte carlo sims
+        while(unplayedActions.size() > 0){
+
+            playerCopy = player.clone();
+            dealerCopy = dealer.clone();
+            deckCopy = new Deck(deck);
+
+            //randomize the deck positions since the dealer's second card and all subsequent cards are unknown
+            deckCopy->shuffle();
+            //some actions haven't been tried yet
+            //these do not count towards the available simulations
+            selector = rand() % unplayedActions.size();
+            //swap the action to the back of vector if it's not already last
+            if(selector != unplayedActions.size() - 1){
+                ACTION_NODE* temp_action;
+                temp_action = unplayedActions[selector];
+                unplayedActions[selector] = unplayedActions[unplayedActions.size() - 1];
+                unplayedActions[unplayedActions.size() - 1] = temp_action;
+            }
+
+            //grab the action so that we can mark it as played
+            action_to_play = unplayedActions.back();
+            unplayedActions.pop_back();
 
 
-        //randomize the deck positions since the dealer's second card and all subsequent cards are unknown
-        deckCopy.shuffle();
-        //some actions haven't been tried yet
-        //these do not count towards the available simulations
-        selector = rand() % unplayedActions.size();
-        //swap the action to the back of vector if it's not already last
-        if(selector != unplayedActions.size() - 1){
-            ACTION_NODE* temp_action;
-            temp_action = unplayedActions[selector];
-            unplayedActions[selector] = unplayedActions[unplayedActions.size() - 1];
-            unplayedActions[unplayedActions.size() - 1] = temp_action;
+            //then play the action
+            if(action_to_play->action == HIT){
+                playerCopy->hit(deckCopy->deal());
+
+                Hand* handCopy = playerCopy->currentHand;
+                ACTION tempAction = action_to_play->action;
+                while(tempAction != STAY && playerCopy->currentHand != handCopy){
+                    //busting on a  hit will advance current hand to the next hand, or to null
+
+                    playerCopy->getActions();
+
+                    tempAction = monteCarlo(*playerCopy, *dealerCopy, deck);
+                    if(tempAction == HIT){
+                        playerCopy->hit(deckCopy->deal());
+                    }else{
+                        //once you hit, you can't double/split, so stay is the only other option
+                        tempAction = STAY;
+                    }
+                }
+
+                //dealer plays hand out
+                bool handOver = false;
+                while(handOver == false){
+                    //dealer plays
+
+                    //dealers facedown card is now finalized
+                    dealerCopy->addCardToNewHand(deckCopy->deal());
+                    dealerCopy->getActions();
+                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->playAction(deck);
+                    handOver = dealerCopy->isFinished;
+                }
+
+
+                playerCopy->compareHands(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+            }else if(action_to_play->action == STAY){
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareHands(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+            }else if(action_to_play->action == DOUBLE){
+                playerCopy->doubleUp(deckCopy->deal());
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareHands(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+
+            }else if(action_to_play->action == SPLIT){
+                playerCopy->splitHand();
+
+                //hand 1
+                playerCopy->getActions();
+
+                //hand 2
+                playerCopy->getActions();
+
+                dealerCopy->addCardToNewHand(deckCopy->deal());
+
+                playerCopy->compareHands(dealerCopy->hand[0]);
+                action_to_play->timesPlayed += 1.00;
+                action_to_play->timesWon += playerCopy->roundsWon;
+                action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
+
+            }
+
+            playedActions.push_back(action_to_play);
+            delete playerCopy;
+            delete dealerCopy;
+            delete deckCopy;
+
+
+        }
+    }
+    //all actions have been tried at least once
+    //so we use the UTC algorithm to decide
+    int totalTickets = (playedActions.size() - 1) * 2;
+
+    for(int i = 0; i < NUM_MC_SIMS; i++){
+        //then create a copy of myHand, dealerHand, and the deck
+        //these will serve as the copies to run the monte carlo sims
+
+        playerCopy = player.clone();
+        dealerCopy = dealer.clone();
+        deckCopy = new Deck(deck);
+
+
+        //first we assign available tickets, weighting the action with the best win %
+        assignTickets(playedActions, totalTickets);
+
+        //then we draw a ticket from 0 to N - 1
+        int ticketDrawn = rand() % totalTickets;
+
+        //we use that ticket to figure out which action to select using UTC
+        for(int i = 0; i < playedActions.size(); i++){
+            ticketDrawn -= playedActions[i]->tickets;
+            if(ticketDrawn < 0){
+                action_to_play = playedActions[i];
+            }
         }
 
-        //grab the action so that we can mark it as played
-        action_to_play = unplayedActions.back();
-        unplayedActions.pop_back();
-
-
-
-        //then play the action
+        //dealer's unknown card is dealt first, but isn't used in the Monte Carlo logic
+        dealerCopy->addCardToNewHand(deckCopy->deal());
         if(action_to_play->action == HIT){
 
         }else if(action_to_play->action == STAY){
@@ -69,36 +180,12 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
 
         }
 
-        playedActions.push_back(action_to_play);
 
-    }else{
-        //all actions have been tried at least once
-        //so we use the UTC algorithm to decide
-        int totalTickets = (playedActions.size() - 1) * 2;
-
-        for(int i = 0; i < NUM_MC_SIMS; i++){
-            //then create a copy of myHand, dealerHand, and the deck
-            //these will serve as the copies to run the monte carlo sims
-
-            //first we assign available tickets, weighting the action with the best win %
-            assignTickets(playedActions, totalTickets);
-
-            //then we draw a ticket from 0 to N - 1
-            int ticketDrawn = rand() % totalTickets;
-
-            //we use that ticket to figure out which action to select using UTC
-            for(int i = 0; i < playedActions.size(); i++){
-                ticketDrawn -= playedActions[i]->tickets;
-                if(ticketDrawn < 0){
-                    action_to_play = playedActions[i];
-                }
-            }
-        }
+        delete playerCopy;
+        delete dealerCopy;
+        delete deckCopy;
 
     }
-
-
-
 
 
     //decide best action and return it
@@ -165,7 +252,20 @@ void MCPlayer::assignTickets(std::vector<ACTION_NODE*>& playedActions, int total
 
 }
 
-Player* MCPlayer::clone() const {
+Player* MCPlayer::cloneMe() const {
     Player* temp = new MCPlayer(*this);
         return temp;
+}
+
+Player* MCPlayer::clone() const{
+    Player* temp = cloneMe();
+    temp->hand.clear();
+
+    for(int i = 0; i < this->hand.size(); i++){
+        Hand* tempHand =  new Hand(*this->hand[i]);
+        temp->hand.push_back(tempHand);
+    }
+
+    temp->currentHand = temp->hand[0];
+    return temp;
 }
