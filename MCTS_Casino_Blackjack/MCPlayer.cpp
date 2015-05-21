@@ -79,17 +79,10 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                 while(handCopy1->busted == false && tempAction != STAY){
                         //std::cout << "test" << std::endl;
                     //busting on a  hit will advance current hand to the next hand, or to null
-
-                    //std::cout << "Good?" << std::endl;
-                    playerCopy->getActions();
-                    //std::cout << "STILL GOOD" << std::endl;
-
-                    tempAction == HIT;
-
-                    if(tempAction == HIT){
+                    int decide = rand() % 2;
+                    if(decide == 0){
                         playerCopy->hit(deckCopy->deal());
                     }else{
-                        //once you hit, you can't double/split, so stay is the only other option
                         tempAction = STAY;
                         playerCopy->stay();
                     }
@@ -141,8 +134,16 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     playerCopy->getActions();
 
                     //randomly select moves until stay/bust
-                    playerCopy->selected_action = HIT;
-
+                    int decide = rand() % playerCopy->available_actions.size();
+                    if(decide == 0){
+                            tempAction = HIT;
+                    }else if(decide == 1){
+                        tempAction = STAY;
+                    }else if(decide == 2){
+                            tempAction = DOUBLE;
+                    }else if(decide == 3){
+                            tempAction = SPLIT;
+                    }
 
                     playerCopy->playAction(*deckCopy);
                 }
@@ -211,15 +212,10 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                 while(handCopy1->busted == false && tempAction != STAY){
                     //busting on a  hit will advance current hand to the next hand, or to null
 
-                    //std::cout << "french" << std::endl;
-                    playerCopy->getActions();
-                    //std::cout << "fries" << std::endl;
-
-                    tempAction = HIT;
-                    if(tempAction == HIT){
+                   int decide = rand() % 2;
+                    if(decide == 0){
                         playerCopy->hit(deckCopy->deal());
                     }else{
-                        //once you hit, you can't double/split, so stay is the only other option
                         tempAction = STAY;
                         playerCopy->stay();
                     }
@@ -271,7 +267,17 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     playerCopy->getActions();
 
                     //randomly pick moves until stay/bust
-                    playerCopy->selected_action = HIT;
+                    //randomly select moves until stay/bust
+                    int decide = rand() % playerCopy->available_actions.size();
+                    if(decide == 0){
+                            tempAction = HIT;
+                    }else if(decide == 1){
+                        tempAction = STAY;
+                    }else if(decide == 2){
+                            tempAction = DOUBLE;
+                    }else if(decide == 3){
+                            tempAction = SPLIT;
+                    }
 
                     playerCopy->playAction(*deckCopy);
                 }

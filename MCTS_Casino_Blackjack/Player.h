@@ -61,16 +61,16 @@ public:
     virtual Player* clone() const = 0;
 
 
-    void hit(Card);
-    void stay();
-    void doubleUp(Card);
-    void splitHand();
+    inline void hit(Card);
+    inline void stay();
+    inline void doubleUp(Card);
+    inline void splitHand();
 
     Hand* getNextHand();
     void initializeNewHand();
     void addCardToNewHand(Card newCard);
     void updateBankroll(int results);
-    void emptyHand();
+    inline void emptyHand();
     void printHands();
     virtual void printCurrentHand();
 

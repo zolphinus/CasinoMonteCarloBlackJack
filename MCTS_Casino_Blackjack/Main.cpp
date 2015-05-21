@@ -17,11 +17,11 @@
 #include <iostream>
 
 
-#define NUM_DECKS 6
-#define NUM_SIMS 5000
+#define NUM_DECKS 2
+#define NUM_SIMS 1500
 #define START_BANKROLL 50000
 
-#define UNLIMITED_BANKROLL false
+#define UNLIMITED_BANKROLL true
 
 
 void testGame();
@@ -75,7 +75,7 @@ int main(){
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 
-    //Test Action Dealer
+    //Test Hit Action Player
 
     delete player;
     delete dealer;
@@ -92,6 +92,25 @@ int main(){
     dealer = new HardDealer(START_BANKROLL);
 
     botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+
+    //Test Stay Action Player
+    delete player;
+    delete dealer;
+
+    player = new ActionPlayer(START_BANKROLL, STAY);
+    dealer = new SoftDealer(START_BANKROLL);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+    delete player;
+    delete dealer;
+
+    player = new ActionPlayer(START_BANKROLL, STAY);
+    dealer = new HardDealer(START_BANKROLL);
+
+    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
 
 
     //test Random Player
