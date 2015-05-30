@@ -3,7 +3,7 @@
 #include <limits>
 
 HardDealer::HardDealer(int bankroll): Player(bankroll){
-    playerName = "Dealer (Hard17)";
+    playerName = "Hard";
 }
 
 

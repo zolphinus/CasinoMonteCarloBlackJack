@@ -2,6 +2,8 @@
 #include "Deck.h"
 #include <time.h>
 #include <cstdlib>
+#include <sstream>
+
 #include "Hand.h"
 
 
@@ -21,7 +23,7 @@
 #define NUM_SIMS 1500
 #define START_BANKROLL 50000
 
-#define UNLIMITED_BANKROLL true
+#define UNLIMITED_BANKROLL false
 
 
 void testGame();
@@ -34,13 +36,43 @@ void humanSoft(int decks, int bankroll, int simulations);
 //hard dealer versus dealers
 void botGame(int, int, int, Player*&, Player*&);
 
-
+std::string filePath = "";
+std::string buildFilePath = "";
 
 int main(){
     srand(time(NULL));
-    Deck deck(1);
+    Deck deck(NUM_DECKS);
     deck.shuffle();
     //Test Hard Dealer
+
+    int a = NUM_DECKS;
+    std::stringstream ss;
+    ss << a;
+    std::string deckPortion = ss.str() + "d_";
+    ss.str("");
+    ss.clear();
+
+    a = NUM_SIMS;
+    ss << a;
+    std::string simsPortion = ss.str() + "s_";
+    ss.str("");
+    ss.clear();
+
+    a = NUM_MC_SIMS;
+    ss << a;
+    std::string MCsimsPortion = ss.str() + "mc_";
+    ss.str("");
+    ss.clear();
+
+    a = START_BANKROLL;
+    ss << a;
+    std::string bankrollPortion = ss.str() + "b_";
+    ss.str("");
+    ss.clear();
+
+    buildFilePath = deckPortion + simsPortion + MCsimsPortion + bankrollPortion;
+    //std::cout << buildFilePath << std::endl;
+
 
     Player* player = new HardDealer(START_BANKROLL);
     Player* dealer = new SoftDealer(START_BANKROLL);
@@ -323,6 +355,10 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
     Player* player = newPlayer;
     Player* dealer = newDealer;
 
+    filePath = "";
+    filePath += "/data/" + newPlayer->playerName + "_" + dealer->playerName + "_" + buildFilePath;
+
+    std::cout << filePath << std::endl;
     if(UNLIMITED_BANKROLL){
         //create string here for separate file name
     }

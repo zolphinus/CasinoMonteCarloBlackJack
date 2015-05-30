@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 SoftDealer::SoftDealer(int bankroll): Player(bankroll){
-    playerName = "Dealer (Soft17)";
+    playerName = "Soft";
 }
 
 

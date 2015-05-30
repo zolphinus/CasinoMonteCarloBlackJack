@@ -74,6 +74,11 @@ public:
     void printHands();
     virtual void printCurrentHand();
 
+    void saveWinRateData(std::string, double);
+    void saveMoneyData(std::string, int);
+    void saveTimeData(std::string, double);
+
+
     void checkIfFinished();
 };
 
