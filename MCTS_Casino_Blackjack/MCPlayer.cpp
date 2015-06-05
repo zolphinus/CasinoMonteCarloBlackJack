@@ -13,7 +13,7 @@ void MCPlayer::selectAction(Player& dealer, Deck& deck){
 }
 
 
-ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
+ACTION MCPlayer::monteCarlo(const Player& player, const Player& dealer, Deck deck){
     //std::cout << "monte carlo" << std::endl;
 
     ACTION chosen_action = STAY;
@@ -50,8 +50,16 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
             dealerCopy = dealer.clone();
             deckCopy = new Deck(deck);
 
+
+            /*
+
+            Commented out to check if this causes unnecessary overhead
+
             //randomize the deck positions since the dealer's second card and all subsequent cards are unknown
             deckCopy->shuffle();
+            */
+
+
             //some actions haven't been tried yet
             //these do not count towards the available simulations
             selector = rand() % unplayedActions.size();
@@ -97,7 +105,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     //dealers facedown card is now finalized
                     dealerCopy->addCardToNewHand(deckCopy->deal());
                     dealerCopy->getActions();
-                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->selectAction(*dealerCopy, deck);
                     dealerCopy->playAction(deck);
                     handOver = dealerCopy->isFinished;
                 }
@@ -115,7 +123,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                 action_to_play->timesPlayed += 1.00;
                 action_to_play->timesWon += playerCopy->roundsWon;
                 action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
-            }else if(action_to_play->action == DOUBLE){
+            }else if(action_to_play->action == DOUBLE_DOWN){
                 playerCopy->doubleUp(deckCopy->deal());
                 dealerCopy->addCardToNewHand(deckCopy->deal());
 
@@ -126,26 +134,28 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
 
             }else if(action_to_play->action == SPLIT){
                 playerCopy->splitHand();
-
-
-                ACTION tempAction = action_to_play->action;
                 //multiple hands
                 while(playerCopy->currentHand != NULL){
                     playerCopy->getActions();
 
                     //randomly select moves until stay/bust
-                    int decide = rand() % playerCopy->available_actions.size();
-                    if(decide == 0){
-                            tempAction = HIT;
-                    }else if(decide == 1){
-                        tempAction = STAY;
-                    }else if(decide == 2){
-                            tempAction = DOUBLE;
-                    }else if(decide == 3){
-                            tempAction = SPLIT;
+                    int decide = rand() % 2;
+
+                    if(playerCopy->currentHand->handValue < 17){
+                        playerCopy->hit(deckCopy->deal());
+                    }else{
+                        playerCopy->stay();
                     }
 
-                    playerCopy->playAction(*deckCopy);
+                    /*
+                    if(decide == 0){
+                            playerCopy->hit(deckCopy->deal());
+                    }else if(decide == 1){
+                        playerCopy->stay();
+                    }
+                    */
+
+
                 }
 
                 //dealer plays hand out
@@ -156,7 +166,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     //dealers facedown card is now finalized
                     dealerCopy->addCardToNewHand(deckCopy->deal());
                     dealerCopy->getActions();
-                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->selectAction(*dealerCopy, deck);
                     dealerCopy->playAction(deck);
                     handOver = dealerCopy->isFinished;
                 }
@@ -230,7 +240,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     //dealers facedown card is now finalized
                     dealerCopy->addCardToNewHand(deckCopy->deal());
                     dealerCopy->getActions();
-                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->selectAction(*dealerCopy, deck);
                     dealerCopy->playAction(deck);
                     handOver = dealerCopy->isFinished;
                 }
@@ -248,7 +258,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                 action_to_play->timesPlayed += 1.00;
                 action_to_play->timesWon += playerCopy->roundsWon;
                 action_to_play->winRate = (action_to_play->timesWon / action_to_play->timesPlayed);
-            }else if(action_to_play->action == DOUBLE){
+            }else if(action_to_play->action == DOUBLE_DOWN){
                 playerCopy->doubleUp(deckCopy->deal());
                 dealerCopy->addCardToNewHand(deckCopy->deal());
 
@@ -264,22 +274,30 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                 ACTION tempAction = action_to_play->action;
                 //multiple hands
                 while(playerCopy->currentHand != NULL){
-                    playerCopy->getActions();
+                    //playerCopy->getActions();
 
                     //randomly pick moves until stay/bust
                     //randomly select moves until stay/bust
-                    int decide = rand() % playerCopy->available_actions.size();
-                    if(decide == 0){
-                            tempAction = HIT;
-                    }else if(decide == 1){
-                        tempAction = STAY;
-                    }else if(decide == 2){
-                            tempAction = DOUBLE;
-                    }else if(decide == 3){
-                            tempAction = SPLIT;
+
+
+
+                    if(playerCopy->currentHand->handValue < 18){
+                        playerCopy->hit(deckCopy->deal());
+                    }else{
+                        playerCopy->stay();
                     }
 
-                    playerCopy->playAction(*deckCopy);
+                    /*
+
+                    int decide = rand() % 2;
+                    if(decide == 0){
+                            playerCopy->hit(deckCopy->deal());
+                    }else if(decide == 1){
+                        playerCopy->stay();
+                    }
+
+                    */
+
                 }
 
                 //dealer plays hand out
@@ -290,7 +308,7 @@ ACTION MCPlayer::monteCarlo(Player& player, Player& dealer, Deck& deck){
                     //dealers facedown card is now finalized
                     dealerCopy->addCardToNewHand(deckCopy->deal());
                     dealerCopy->getActions();
-                    dealerCopy->selectAction(dealer, deck);
+                    dealerCopy->selectAction(*dealerCopy, deck);
                     dealerCopy->playAction(deck);
                     handOver = dealerCopy->isFinished;
                 }

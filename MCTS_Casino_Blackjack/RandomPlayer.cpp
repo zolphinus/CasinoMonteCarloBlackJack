@@ -16,7 +16,7 @@ void RandomPlayer::selectAction(Player& dealer, Deck& deck){
         selected_action = STAY;
         break;
     case 2:
-        selected_action = DOUBLE;
+        selected_action = DOUBLE_DOWN;
         break;
     case 3:
         selected_action = SPLIT;

@@ -25,6 +25,12 @@ Deck::~Deck(){
 Card Deck::deal(){
     Card tempCard('E', ERROR);
     if(card.size() > 0){
+        int j = rand() % card.size();
+
+        Card* temp = card[j];
+        card[j] = card[card.size() - 1];
+        card[card.size() - 1] = temp;
+
         tempCard = *card.back();
         card.pop_back();
         return tempCard;
@@ -36,7 +42,7 @@ Card Deck::deal(){
 
 
 void Deck::shuffle(){
-
+    //fisher yates shuffle
     for(int i = card.size() - 1; i >= 1; i--){
         int j = rand() % i;
 

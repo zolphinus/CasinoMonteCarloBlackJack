@@ -3,6 +3,7 @@
 #include <time.h>
 #include <cstdlib>
 #include <sstream>
+#include <windows.h>
 
 #include "Hand.h"
 
@@ -19,9 +20,11 @@
 #include <iostream>
 
 
-#define NUM_DECKS 2
-#define NUM_SIMS 1500
+#define NUM_DECKS 1
+#define NUM_SIMS 1000
 #define START_BANKROLL 50000
+
+#define NUM_LOOPS 1
 
 #define UNLIMITED_BANKROLL false
 
@@ -73,123 +76,131 @@ int main(){
     buildFilePath = deckPortion + simsPortion + MCsimsPortion + bankrollPortion;
     //std::cout << buildFilePath << std::endl;
 
+    for(int i = 0; i < NUM_LOOPS; ++i){
+        /*
 
-    Player* player = new HardDealer(START_BANKROLL);
-    Player* dealer = new SoftDealer(START_BANKROLL);
+        Player* player = new HardDealer(START_BANKROLL);
+        Player* dealer = new SoftDealer(START_BANKROLL);
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
-
-
-    delete player;
-    delete dealer;
-
-    player = new HardDealer(START_BANKROLL);
-    dealer = new HardDealer(START_BANKROLL);
-
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
-
-    //Test Soft Dealer
-
-    delete player;
-    delete dealer;
-
-    player = new SoftDealer(START_BANKROLL);
-    dealer = new SoftDealer(START_BANKROLL);
-
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
-
-    delete player;
-    delete dealer;
-
-    player = new SoftDealer(START_BANKROLL);
-    dealer = new HardDealer(START_BANKROLL);
-
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 
-    //Test Hit Action Player
+        delete player;
+        delete dealer;
 
-    delete player;
-    delete dealer;
+        player = new HardDealer(START_BANKROLL);
+        dealer = new HardDealer(START_BANKROLL);
 
-    player = new ActionPlayer(START_BANKROLL, HIT);
-    dealer = new SoftDealer(START_BANKROLL);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        //Test Soft Dealer
 
-    delete player;
-    delete dealer;
+        delete player;
+        delete dealer;
 
-    player = new ActionPlayer(START_BANKROLL, HIT);
-    dealer = new HardDealer(START_BANKROLL);
+        player = new SoftDealer(START_BANKROLL);
+        dealer = new SoftDealer(START_BANKROLL);
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
+        delete player;
+        delete dealer;
 
-    //Test Stay Action Player
-    delete player;
-    delete dealer;
+        player = new SoftDealer(START_BANKROLL);
+        dealer = new HardDealer(START_BANKROLL);
 
-    player = new ActionPlayer(START_BANKROLL, STAY);
-    dealer = new SoftDealer(START_BANKROLL);
-
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
-
-    delete player;
-    delete dealer;
-
-    player = new ActionPlayer(START_BANKROLL, STAY);
-    dealer = new HardDealer(START_BANKROLL);
-
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 
+        //Test Hit Action Player
 
-    //test Random Player
-    player = new RandomPlayer(START_BANKROLL);
-    dealer = new SoftDealer(START_BANKROLL);
+        delete player;
+        delete dealer;
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        player = new ActionPlayer(START_BANKROLL, HIT);
+        dealer = new SoftDealer(START_BANKROLL);
 
-    delete player;
-    delete dealer;
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
-    player = new RandomPlayer(START_BANKROLL);
-    dealer = new HardDealer(START_BANKROLL);
+        delete player;
+        delete dealer;
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        player = new ActionPlayer(START_BANKROLL, HIT);
+        dealer = new HardDealer(START_BANKROLL);
 
-    //test Basic Player
-    player = new BasicPlayer(START_BANKROLL);
-    dealer = new SoftDealer(START_BANKROLL);
-
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
 
-    delete player;
-    delete dealer;
+        //Test Stay Action Player
+        delete player;
+        delete dealer;
 
-    player = new BasicPlayer(START_BANKROLL);
-    dealer = new HardDealer(START_BANKROLL);
+        player = new ActionPlayer(START_BANKROLL, STAY);
+        dealer = new SoftDealer(START_BANKROLL);
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
-    delete player;
-    delete dealer;
+        delete player;
+        delete dealer;
 
-    player = new MCPlayer(START_BANKROLL);
-    dealer = new HardDealer(START_BANKROLL);
+        player = new ActionPlayer(START_BANKROLL, STAY);
+        dealer = new HardDealer(START_BANKROLL);
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
-    delete player;
-    delete dealer;
+        */
 
-    player = new MCPlayer(START_BANKROLL);
-    dealer = new SoftDealer(START_BANKROLL);
+        //test Random Player
+        Player* player = new RandomPlayer(START_BANKROLL);
+        Player* dealer = new SoftDealer(START_BANKROLL);
 
-    botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
 
+        delete player;
+        delete dealer;
+
+        player = new RandomPlayer(START_BANKROLL);
+        dealer = new HardDealer(START_BANKROLL);
+
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+        //test Basic Player
+        player = new BasicPlayer(START_BANKROLL);
+        dealer = new SoftDealer(START_BANKROLL);
+
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+
+        delete player;
+        delete dealer;
+
+        player = new BasicPlayer(START_BANKROLL);
+        dealer = new HardDealer(START_BANKROLL);
+
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+        delete player;
+        delete dealer;
+
+        player = new MCPlayer(START_BANKROLL);
+        dealer = new HardDealer(START_BANKROLL);
+
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+        delete player;
+        delete dealer;
+
+        player = new MCPlayer(START_BANKROLL);
+        dealer = new SoftDealer(START_BANKROLL);
+
+        botGame(NUM_DECKS, START_BANKROLL, NUM_SIMS, player, dealer);
+
+        delete player;
+        delete dealer;
+
+
+        std::cout << std::endl << "LOOP " << i << std::endl << std::endl;
+    }
 }
 
 
@@ -356,7 +367,8 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
     Player* dealer = newDealer;
 
     filePath = "";
-    filePath += "/data/" + newPlayer->playerName + "_" + dealer->playerName + "_" + buildFilePath;
+    std::string folderPath = "data/";
+    filePath += newPlayer->playerName + "_" + dealer->playerName + "_" + buildFilePath;
 
     std::cout << filePath << std::endl;
     if(UNLIMITED_BANKROLL){
@@ -370,6 +382,14 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
 
 
     double highest_bankroll = 0;
+
+
+    LARGE_INTEGER frequency;        // ticks per second
+    LARGE_INTEGER start_time, end_time;           // ticks
+    double elapsedTime;
+
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&start_time);
 
     for(int i = 0; i < simulations; i ++){
         //restore the deck to a randomized original state
@@ -415,17 +435,25 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         //hands are evaluated
         player->compareHands(dealer->hand[0]);
     }
+        QueryPerformanceCounter(&end_time);
 
+        elapsedTime = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) / simulations;
 
+        double winRate = (player->roundsWon / player->roundsPlayed) * 100;
         std::cout << "Rounds played : " << player->roundsPlayed << std::endl;
         std::cout << "Rounds won : " << player->roundsWon << std::endl;
         std::cout << "Bankroll : " << player->bankroll << std::endl;
         std::cout << "Highest Bankroll : " << highest_bankroll << std::endl << std::endl;
-        std::cout << "Win rate is " << (player->roundsWon / player->roundsPlayed) * 100 << "%" << std::endl;
-
+        std::cout << "Win rate is " << winRate << "%" << std::endl;
+        std::cout << "Time elapsed is " << elapsedTime << " ms " << std::endl;
         //output average/min/max statistics to file
 
         std::cout << std::endl << std::endl;
+
+        player->saveWinRateData(folderPath, filePath, winRate);
+        player->saveMoneyData(folderPath, filePath, player->bankroll);
+        player->saveTimeData(folderPath, filePath, elapsedTime);
+
 }
 
 void testClone(const Player* original){

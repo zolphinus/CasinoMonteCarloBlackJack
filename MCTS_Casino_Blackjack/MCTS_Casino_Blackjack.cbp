@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="ActionNode.h" />
 		<Unit filename="ActionPlayer.cpp" />
 		<Unit filename="ActionPlayer.h" />
 		<Unit filename="BasicPlayer.cpp" />
@@ -45,6 +46,8 @@
 		<Unit filename="HardDealer.h" />
 		<Unit filename="HumanPlayer.cpp" />
 		<Unit filename="HumanPlayer.h" />
+		<Unit filename="MCPlayer.cpp" />
+		<Unit filename="MCPlayer.h" />
 		<Unit filename="Main.cpp" />
 		<Unit filename="Player.cpp" />
 		<Unit filename="Player.h" />

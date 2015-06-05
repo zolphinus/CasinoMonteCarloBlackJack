@@ -11,7 +11,7 @@
 enum ACTION{
     HIT,
     STAY,
-    DOUBLE,
+    DOUBLE_DOWN,
     SPLIT,
     NO_ACTION
 };
@@ -20,6 +20,20 @@ enum ACTION{
 class Player{
 public:
     Player(int startingBankroll);
+    virtual ~Player(){
+
+        /*
+        if(hand.size() > 0){
+            std::vector<Hand*>::iterator it = hand.begin();
+            int i = 0;
+            for(it; it != hand.end(); it++, i++){
+                Hand* tempHand = *it;
+                delete tempHand;
+            }
+            hand.clear();
+        }
+        */
+    };
 
     //player data
     std::string playerName;
@@ -74,9 +88,9 @@ public:
     void printHands();
     virtual void printCurrentHand();
 
-    void saveWinRateData(std::string, double);
-    void saveMoneyData(std::string, int);
-    void saveTimeData(std::string, double);
+    void saveWinRateData(std::string, std::string, double);
+    void saveMoneyData(std::string, std::string, int);
+    void saveTimeData(std::string, std::string, double);
 
 
     void checkIfFinished();

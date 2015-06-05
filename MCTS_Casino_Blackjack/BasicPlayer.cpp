@@ -49,7 +49,7 @@ void BasicPlayer::selectAction(Player& dealer, Deck& deck){
             switch(upcard){
             case '2' : case '3' : case '4' : case '5' : case '6':
             case '7' : case '8' : case '9' :
-                selected_action = DOUBLE;
+                selected_action = DOUBLE_DOWN;
                 break;
             case 'Z' : case 'J' :
             case 'Q' : case 'K' : case 'A' :
@@ -104,7 +104,7 @@ void BasicPlayer::selectAction(Player& dealer, Deck& deck){
             switch(upcard){
             case '2' : case '3' : case '4' : case '5' : case '6': case '7' :
             case '8' : case '9' : case 'Z' : case 'J' : case 'Q' : case 'K' :
-                selected_action = DOUBLE;
+                selected_action = DOUBLE_DOWN;
                 break;
             case 'A' :
                 selected_action = HIT;
@@ -114,7 +114,7 @@ void BasicPlayer::selectAction(Player& dealer, Deck& deck){
             switch(upcard){
             case '2' : case '3' : case '4' : case '5' : case '6': case '7' :
             case '8' : case '9' :
-                selected_action = DOUBLE;
+                selected_action = DOUBLE_DOWN;
                 break;
             case 'Z' : case 'J' : case 'Q' : case 'K' : case 'A' :
                 selected_action = HIT;
@@ -123,7 +123,7 @@ void BasicPlayer::selectAction(Player& dealer, Deck& deck){
         }else if(value == 9){
             switch(upcard){
             case '3' : case '4' : case '5' : case '6':
-                selected_action = DOUBLE;
+                selected_action = DOUBLE_DOWN;
                 break;
             case '2' : case '7' : case '8' : case '9' :
             case 'Z' : case 'J' : case 'Q' : case 'K' : case 'A' :

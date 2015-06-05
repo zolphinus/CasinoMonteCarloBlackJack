@@ -1,7 +1,13 @@
 #include "ActionPlayer.h"
 
 ActionPlayer::ActionPlayer(int bankroll, ACTION newAction): Player(bankroll){
-    playerName = "ActionPlayer";
+
+    if(newAction == HIT){
+        playerName = "HitPlayer";
+    }
+    if(newAction == STAY){
+        playerName = "StayPlayer";
+    }
     preferred_action = newAction;
 }
 

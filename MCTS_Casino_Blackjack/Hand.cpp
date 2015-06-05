@@ -35,6 +35,7 @@ Hand::~Hand(){
         Card* tempCard = *it;
         delete tempCard;
     }
+    card.clear();
 }
 
 bool Hand::canDouble(){

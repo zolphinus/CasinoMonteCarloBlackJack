@@ -127,7 +127,7 @@ void HumanPlayer::selectAction(Player& dealer, Deck& deck){
             selected_action = STAY;
             break;
         case 2:
-            selected_action = DOUBLE;
+            selected_action = DOUBLE_DOWN;
             break;
         case 3:
             selected_action = SPLIT;
@@ -153,7 +153,7 @@ void HumanPlayer::playAction(Deck& deck){
     }else if(selected_action == STAY){
         std::cout << "Staying" << std::endl << std::endl;
         this->stay();
-    }else if(selected_action == DOUBLE){
+    }else if(selected_action == DOUBLE_DOWN){
         std::cout << "Double Up" << std::endl << std::endl;
         this->doubleUp(deck.deal());
     }else if(selected_action == SPLIT){

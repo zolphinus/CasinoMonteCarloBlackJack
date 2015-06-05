@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iostream>
+#include <fstream>
 
 Player::Player(int startingBankroll){
     currentHand = NULL;
@@ -13,7 +14,6 @@ Player::Player(int startingBankroll){
     roundsWon = 0.00;
     highestBankroll = 0;
 }
-
 
 Hand* Player::getNextHand(){
     Hand* tempHand;
@@ -152,7 +152,7 @@ void Player::getActions(){
         available_actions.push_back(HIT);
         available_actions.push_back(STAY);
         if(currentHand->canDouble()){
-            available_actions.push_back(DOUBLE);
+            available_actions.push_back(DOUBLE_DOWN);
         }
 
         if(currentHand->canSplit()){
@@ -182,7 +182,7 @@ void Player::playAction(Deck& deck){
         this->hit(deck.deal());
     }else if(selected_action == STAY){
         this->stay();
-    }else if(selected_action == DOUBLE){
+    }else if(selected_action == DOUBLE_DOWN){
         this->doubleUp(deck.deal());
     }else if(selected_action == SPLIT){
         this->splitHand();
@@ -284,6 +284,53 @@ void Player::compareSingleHand(Hand* dealerHand){
             //loses
 
         }
+    }
+
+}
+
+void Player::saveWinRateData(std::string folderPath, std::string partialPath, double winRate){
+    std::string fileName = folderPath + "win_rates/" + partialPath += "win.txt";
+
+    //open file in append mode
+    std::ofstream fout;
+    fout.open(fileName.c_str(), std::ios::out | std::ios::app );
+    //if open, append to it
+    if(fout.is_open()){
+        fout << winRate << std::endl;
+        fout.close();
+    }
+
+}
+
+
+
+void Player::saveTimeData(std::string folderPath, std::string partialPath, double iteration_time){
+    std::string fileName = folderPath + "time/" + partialPath += "time.txt";
+
+    //open file in append mode
+    std::ofstream fout;
+    fout.open(fileName.c_str(), std::ios::out | std::ios::app );
+    //if open, append to it
+
+    if(fout.is_open()){
+        fout << iteration_time << std::endl;
+        fout.close();
+    }
+
+}
+
+
+void Player::saveMoneyData(std::string folderPath, std::string partialPath, int bankroll){
+    std::string fileName = folderPath + "money/" + partialPath += "money.txt";
+
+    //open file in append mode
+    std::ofstream fout;
+    fout.open(fileName.c_str(), std::ios::out | std::ios::app );
+    //if open, append to it
+
+    if(fout.is_open()){
+        fout << bankroll << std::endl;
+        fout.close();
     }
 
 }

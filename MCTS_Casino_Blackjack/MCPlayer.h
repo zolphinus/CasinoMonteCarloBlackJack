@@ -2,7 +2,7 @@
 #define MONTE_CARLO_PLAYER
 
 #include "Player.h"
-#define NUM_MC_SIMS 250
+#define NUM_MC_SIMS 1000
 
 
 struct ACTION_NODE{
@@ -19,7 +19,7 @@ public:
 
     void selectAction(Player& dealer, Deck& deck);
 
-    ACTION monteCarlo(Player& player, Player& dealer, Deck& deck);
+    ACTION monteCarlo(const Player& player, const Player& dealer, Deck deck);
 
     void assignTickets(std::vector<ACTION_NODE*>& playedActions, int);
     Player* clone() const;
