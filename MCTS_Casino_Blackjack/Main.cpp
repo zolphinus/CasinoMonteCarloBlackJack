@@ -24,7 +24,7 @@
 #define NUM_SIMS 1000
 #define START_BANKROLL 50000
 
-#define NUM_LOOPS 1
+#define NUM_LOOPS 30
 
 #define UNLIMITED_BANKROLL false
 
@@ -427,7 +427,7 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
 
             //dealers facedown card is now finalized
             dealer->addCardToNewHand(deck.deal());
-            dealer->getActions();
+            //dealer->getActions();
             dealer->selectAction(*dealer, deck);
             dealer->playAction(deck);
             handOver = dealer->isFinished;
