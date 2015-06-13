@@ -5,7 +5,7 @@
 
 1431622511 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\card.h
 
-1433534133 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\main.cpp
+1434158835 source:c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\main.cpp
 	"Card.h"
 	"Deck.h"
 	<time.h>
@@ -107,6 +107,6 @@
 	<cstdlib>
 	<iostream>
 
-1433533949 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\mcplayer.h
+1434155914 c:\users\zolphinus\documents\github\casinomontecarloblackjack\mcts_casino_blackjack\mcplayer.h
 	"Player.h"
 

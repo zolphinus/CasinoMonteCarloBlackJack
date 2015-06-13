@@ -2,7 +2,7 @@
 #define MONTE_CARLO_PLAYER
 
 #include "Player.h"
-#define NUM_MC_SIMS 100
+#define NUM_MC_SIMS 50
 
 
 struct ACTION_NODE{
