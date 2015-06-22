@@ -21,10 +21,10 @@
 
 
 #define NUM_DECKS 1
-#define NUM_SIMS 2000
+#define NUM_SIMS 1000
 #define START_BANKROLL 50000
 
-#define NUM_LOOPS 10
+#define NUM_LOOPS 50
 
 #define UNLIMITED_BANKROLL false
 
