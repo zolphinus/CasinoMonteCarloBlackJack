@@ -1,7 +1,7 @@
 #include "Hand.h"
 #include <iostream>
 
-Hand::Hand(int betValue){
+Hand::Hand(double betValue){
     this->betValue = betValue;
     won = false;
     busted = false;
@@ -13,10 +13,14 @@ Hand::Hand(int betValue){
 }
 
 
-Hand::Hand(Card& firstCard, int betValue ){
+Hand::Hand(Card& firstCard, double betValue ){
     Card* tempCard = new Card(firstCard);
     card.push_back(tempCard);
     this->betValue = betValue;
+
+    if(betValue > MAX_BID){
+        this->betValue = MAX_BID;
+    }
     won = false;
     busted = false;
     doubled = false;

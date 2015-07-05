@@ -6,7 +6,6 @@
 #include "Hand.h"
 #include "Deck.h"
 
-#define MAX_BID 100
 
 enum ACTION{
     HIT,
@@ -19,7 +18,7 @@ enum ACTION{
 
 class Player{
 public:
-    Player(int startingBankroll);
+    Player(double startingBankroll);
     virtual ~Player(){
 
         /*
@@ -49,8 +48,8 @@ public:
 
     std::vector<ACTION> available_actions;
     ACTION selected_action;
-    int starting_bankroll;
-    int bankroll;
+    double starting_bankroll;
+    double bankroll;
     int bid;
     bool isFinished;
 

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 
-Player::Player(int startingBankroll){
+Player::Player(double startingBankroll){
     currentHand = NULL;
     selected_action = NO_ACTION;
     this->starting_bankroll = startingBankroll;
@@ -215,7 +215,7 @@ void Player::compareHands(Hand* dealerHand){
             roundsWon += hand[i]->handRewardValue;
         }else if(hand[i]->handValue == 21 && hand[i]->card.size() == 2 && hand[i]->blackjackPossible){
             //dealer has no blackjack but player does
-            this->bankroll += (3 * hand[i]->betValue);
+            this->bankroll += (3 * hand[i]->betValue / 2);
             roundsWon += hand[i]->handRewardValue;
         }else{
             //we must compare hand values to determine winner

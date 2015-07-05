@@ -20,9 +20,9 @@
 #include <iostream>
 
 
-#define NUM_DECKS 1
-#define NUM_SIMS 1000
-#define START_BANKROLL 50000
+#define NUM_DECKS 2
+#define NUM_SIMS 500
+#define START_BANKROLL 10000
 
 #define NUM_LOOPS 50
 
@@ -67,7 +67,7 @@ int main(){
     ss.str("");
     ss.clear();
 
-    a = START_BANKROLL;
+    a = MAX_BID;
     ss << a;
     std::string bankrollPortion = ss.str() + "b_";
     ss.str("");
@@ -398,7 +398,7 @@ void botGame(int decks, int bankroll, int simulations, Player*& newPlayer,
         }
 
         if(player->bankroll < player->bid){
-            if(UNLIMITED_BANKROLL){
+            if(UNLIMITED_BANKROLL == true){
                 player->bankroll = bankroll;
             }else{
                 break;

@@ -3,14 +3,16 @@
 #include <vector>
 #include "Card.h"
 
+#define MAX_BID 100
+
 class Hand{
 public:
-    Hand(int betValue);
-    Hand(Card&, int betValue);
+    Hand(double betValue);
+    Hand(Card&, double betValue);
     ~Hand();
 
     std::vector<Card*> card;
-    int betValue;
+    double betValue;
     int handValue;
     double handRewardValue;
 
